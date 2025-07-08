@@ -28,6 +28,23 @@
         
 
     </head>
+    <style>
+            .image-fade img {
+              display: block;
+              width: 100%; /* 필요에 따라 조정 */
+              height: auto;
+            
+              /* 마스크 처리 */
+              -webkit-mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
+              mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
+            
+              -webkit-mask-size: 100% 100%;
+              mask-size: 100% 100%;
+            
+              -webkit-mask-repeat: no-repeat;
+              mask-repeat: no-repeat;
+            }
+    </style>
     <body id="page-top">
 
         <!-- Header-->
@@ -135,7 +152,9 @@
                                     <p class="mb-0" style="font-family: 'Song Myung', serif;">At IVE Studio</p>
                                 </div>
                             </div>
+                            <div class="image-fade">
                             <img class="img-fluid" src="assets/img/main.jpg" alt="..." />
+                            </div>
                         </a>
                     </div>
                     <div class="col-lg-6">

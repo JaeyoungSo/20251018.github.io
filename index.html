@@ -17,7 +17,7 @@
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@700&display=swap" rel="stylesheet">
-        <link href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@700&family=Song+Myung&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Song+Myung&display=swap" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap" rel="stylesheet">
 
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -25,12 +25,48 @@
     </head>
     
     <style>
+    /* 폰트 크기 및 기본적인 반응형 설정 */
+    body {
+        background: #fbf0ea; /* 원하는 배경색 */
+        font-size: 16px; /* 기본 폰트 크기 (rem의 기준) */
+        line-height: 1.6;
+        margin: 0;
+        padding: 0;
+        overflow-x: hidden; /* 가로 스크롤 방지 */
+    }
+
+    /* 모바일 기기에서 폰트 크기 조정 */
+    @media (max-width: 768px) { /* 태블릿/모바일 */
+        body {
+            font-size: 14px; /* 모바일에서 텍스트 크기 약간 줄임 */
+        }
+    }
+    @media (max-width: 480px) { /* 작은 모바일 화면 */
+        body {
+            font-size: 13px; /* 더 작은 모바일에서 텍스트 크기 더 줄임 */
+        }
+    }
+
+    /* 모든 이미지와 비디오는 부모 컨테이너에 맞게 최대 너비 설정 */
+    img, video {
+        max-width: 100%;
+        height: auto;
+        display: block; /* 이미지 하단 공백 제거 */
+    }
+
+    /* Bootstrap 컨테이너들이 화면 너비를 벗어나지 않도록 명시 */
+    .container, .container-fluid {
+        max-width: 100%;
+        padding-left: 15px; /* 양쪽 패딩 */
+        padding-right: 15px;
+        box-sizing: border-box; /* 패딩이 너비에 포함되도록 */
+    }
+
+    /* 이미지 페이드 효과 */
     .image-fade img {
       display: block;
       width: 100%;
       height: auto;
-      
-      /* 아래로 갈수록 점점 투명해지는 마스크 */
       -webkit-mask-image: linear-gradient(to bottom, black 85%, transparent 100%);
       mask-image: linear-gradient(to bottom, black 85%, transparent 100%);
       -webkit-mask-size: 100% 100%;
@@ -38,64 +74,78 @@
       -webkit-mask-repeat: no-repeat;
       mask-repeat: no-repeat;
     }
-    body {
-      background: #fbf0ea; /* 원하는 배경색 */
-    }
 
+    /* 메인 헤더 (Masthead) 스타일 */
     .masthead {
       position: relative;
       background-image: url('assets/img/main.jpg');
       background-size: cover;
       background-position: center;
-      height: 100vh; /* 필요에 따라 조절 */
+      height: 100vh;
       overflow: hidden;
+      display: flex; /* Flexbox 추가 */
+      align-items: flex-end; /* 하단 정렬 */
+      justify-content: center; /* 가운데 정렬 */
+      text-align: center; /* 텍스트 가운데 정렬 */
     }
-    
+    .masthead .container {
+        position: relative;
+        z-index: 3;
+        /* 하단 여백 추가로 텍스트가 너무 바닥에 붙지 않도록 */
+        padding-bottom: 50px; /* 조절 가능 */
+    }
+    .masthead h2 { /* 기존 인라인 스타일 대체 */
+        font-family: 'Amatic SC', sans-serif; 
+        color: white; 
+        font-weight: bold;
+        font-size: 2.2em; /* 상대적인 크기로 조정 */
+        margin-bottom: 0.5rem; /* 제목 간 간격 조절 */
+    }
+    .masthead p { /* 기존 인라인 스타일 대체 */
+        font-family: 'Song Myung', serif; 
+        color: white; 
+        font-size: 0.8125rem; /* 13px / 16px = 0.8125rem */
+        line-height: 1.4; /* 줄 간격 조절 */
+    }
     /* 흐림 효과를 위한 오버레이 */
     .gradient-fade {
       position: absolute;
       bottom: 0;
       left: 0;
       width: 100%;
-      height: 20%; /* 흐림 높이 조절 */
+      height: 30%; /* 흐림 높이 조절, 텍스트가 바닥에 너무 붙지 않게 */
       background: linear-gradient(to bottom, rgba(255, 240, 234, 0) 0%, #fbf0ea 100%);
-      pointer-events: none; /* 클릭 방지 */
+      pointer-events: none;
       z-index: 2;
     }
     
-    /* 텍스트를 이미지 위에 위치하도록 */
-    .masthead .container {
-      position: relative;
-      z-index: 3;
-    }
-
     /* 봉인된 화면 스타일 */
     #sealed-screen {
         position: fixed;
         top: 0; left: 0;
         width: 100vw; height: 100vh;
-        background-color: #fbf0ea; /* 청첩장 배경색과 동일하게 또는 어울리게 */
+        background-color: #fbf0ea;
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        z-index: 9999; /* 다른 콘텐츠 위에 확실히 보이도록 높은 z-index 설정 */
-        transition: opacity 1s ease-out; /* 사라지는 애니메이션 */
+        z-index: 9999;
+        transition: opacity 1s ease-out;
     }
     #seal {
-        width: 180px; /* 씰 크기 조절 */
+        width: 180px;
         height: 180px;
-        background: url('assets/img/seal.png') no-repeat center center; /* 봉인 씰 이미지 경로 (추가 필요) */
+        background: url('assets/img/seal.png') no-repeat center center;
         background-size: contain;
         cursor: pointer;
-        animation: pulse 1.5s infinite; /* 봉인 씰 깜빡임 효과 */
-        -webkit-tap-highlight-color: transparent; /* 모바일 터치 시 하이라이트 제거 */
+        animation: pulse 1.5s infinite;
+        -webkit-tap-highlight-color: transparent;
     }
     #seal-text {
-        margin-top: 25px; /* 씰과 텍스트 간격 조절 */
-        font-size: 1.2em; /* 텍스트 크기 조절 */
+        margin-top: 25px;
+        font-size: 1.2em;
         color: #555;
-        font-family: 'Song Myung', serif; /* 폰트 적용 */
+        font-family: 'Song Myung', serif;
         text-align: center;
         line-height: 1.5;
     }
@@ -117,8 +167,7 @@
         padding-bottom: 75%; /* 4:3 비율 (높이 / 너비 * 100) */
         height: 0;
         overflow: hidden;
-        /* 추가된 부분: 지도를 가운데 정렬하고 최대 너비 설정 */
-        max-width: 400px; /* 지도의 최대 너비를 설정 (원하는 크기로 조절) */
+        max-width: 400px; /* 지도의 최대 너비를 설정 */
         margin: 0 auto; /* 가운데 정렬 */
     }
 
@@ -128,6 +177,66 @@
         left: 0;
         width: 100%;
         height: 100%;
+        /* 핀치 줌을 JavaScript로 막았으므로 pointer-events: none; 은 유지할 필요 없음 */
+        /* 만약 지도 내에서 스크롤도 방지하고 싶다면 pointer-events: none; 을 추가 */
+    }
+
+    /* 폰트 크기 클래스 정의 (인라인 스타일 대체) */
+    .font-size-lg { font-size: 1.25rem; } /* 20px */
+    .font-size-md { font-size: 1rem; }    /* 16px */
+    .font-size-sm { font-size: 0.9375rem; } /* 15px */
+    .font-size-xs { font-size: 0.8125rem; } /* 13px */
+    .font-size-xxs { font-size: 0.75rem; }  /* 12px */
+    .font-size-xxxs { font-size: 0.625rem; } /* 10px */
+    .font-size-xl { font-size: 1.5625rem; } /* 25px */
+    .font-size-xxl { font-size: 2em; } /* Masthead 제목에 사용 */
+
+
+    /* 기타 요소들 패딩 및 마진 조정 (기존 Bootstrap 클래스와 중복될 수 있으니 확인 필요) */
+    section {
+        padding-top: 60px; /* 섹션 상단 패딩 */
+        padding-bottom: 60px; /* 섹션 하단 패딩 */
+    }
+    @media (max-width: 768px) {
+        section {
+            padding-top: 40px;
+            padding-bottom: 40px;
+        }
+    }
+    .img-fluid.rounded-circle {
+        width: 150px; /* 원형 이미지 크기 조정 */
+        height: 150px;
+        object-fit: cover; /* 이미지 비율 유지 */
+        margin-top: 15px; /* 이미지 상단 여백 */
+        margin-bottom: 15px; /* 이미지 하단 여백 */
+    }
+    .map-icon {
+        width: 45px; /* 아이콘 크기 적절히 조절 */
+        height: auto;
+        margin: 0 10px; /* 아이콘 사이 간격 */
+    }
+
+    /* 혼주 연락처보기 버튼 텍스트 크기 조정 */
+    .toggle-button {
+        font-size: 1.25rem !important; /* 20px 기준 */
+    }
+    .foldable-content p {
+        font-size: 0.9375rem !important; /* 15px 기준 */
+    }
+    .foldable-content3 p {
+        font-size: 0.75rem !important; /* 12px 기준 */
+    }
+    .foldable-content3 p.font-size-xxxs {
+        font-size: 0.625rem !important; /* 10px 기준 */
+    }
+    .btn.btn-xl { /* 버튼 폰트 크기 조정 */
+        font-size: 0.8rem !important; /* 12px 기준 */
+        padding: 0.8rem 1.6rem;
+    }
+
+    /* `hr` 요소의 `margin` 조정 */
+    hr {
+        margin: 2rem 0 !important; /* 위아래 여백을 2rem으로 조정 */
     }
 
     </style>
@@ -144,12 +253,13 @@
 
         <div id="main-wrapper">
             <header class="masthead d-flex align-items-center">
-                <div class="gradient-fade"></div> <div class="container px-4 px-lg-5 text-center">
-                    <h2 class="mb-1"> </h2>
-                    <h2 class="mb-1"> </h2>
-                    <h2 style="font-family: 'Amatic SC', sans-serif; color: white; font-weight: bold;">소재영 · 박다은 결혼합니다</h2>
+                <div class="gradient-fade"></div> 
+                <div class="container px-4 px-lg-5">
+                    <h2 class="masthead-title">소재영 · 박다은 결혼합니다</h2>
                     <br>
-                    <p style="font-family: 'Song Myung', serif; color: white; font-size: 13px;"><br>2025.10.18 토요일 12:00<br>대구스타디움 컨벤션<br>2층 컨벤션홀</p>
+                    <p class="masthead-date-location">
+                        <br>2025.10.18 토요일 12:00<br>대구스타디움 컨벤션<br>2층 컨벤션홀
+                    </p>
                 </div>
             </header> 
             
@@ -157,7 +267,7 @@
                 <div class="container px-4 px-lg-5 text-center">
                     <div class="row gx-4 gx-lg-5 justify-content-center">
                         <div class="col-lg-10">
-                            <p style="font-family: 'Song Myung', serif; font-size: 16px;">
+                            <p class="font-size-md">
                                 <br>
                                 <br>
                                 <br>
@@ -169,13 +279,10 @@
                                 <br> 
                                 더없는 기쁨으로 간직하겠습니다.
                             </p>
-                            <h2 style="font-family: 'Song Myung', serif; font-size: 20px; "><br>소준기 · 조영자의 장남    소재영 <br>
+                            <h2 class="font-size-lg"><br>소준기 · 조영자의 장남    소재영 <br>
                                                                                                 박한조 · 김정화의 차녀    박다은 <br> 
                             </h2>
-                            <p style="font-family: 'Song Myung', serif; font-size: 16px;">
-                            </p>
-
-                            <p style="font-family: 'Song Myung', serif; font-size: 16px;">
+                            <p class="font-size-md"></p> <p class="font-size-md">
                                 <br>
                                 <br>
                                 <br>
@@ -185,7 +292,7 @@
                                 신랑 신부에게 축하의 말 전하기
                                 <br>
                             </p>
-                            <hr style="border: none; border-top: 1px solid rgba(0, 0, 0, 0.3); margin: 30px 0;">
+                            <hr>
                             <iframe src="https://padlet.com/threeout56/padlet-lf0wod6kw6eresgw" frameborder="0" width="100%" height="600" style="border:0;" allowfullscreen></iframe>
                         </div>
                     </div>
@@ -195,13 +302,13 @@
             <section class="content-section bg-primary text-white text-center" id="services">
                 <div class="container px-4 px-lg-5">
                     <div class="content-section-heading">
-                        <p style="font-family: 'Song Myung', serif; font-size: 25px; font-weight: bold;">신랑&신부</p>
+                        <p class="font-size-xl font-weight-bold">신랑&신부</p>
                     </div>
                     <br>
                     <div class="row gx-4 gx-lg-5">
                         <div class="col-lg-6 col-md-6 mb-5 mb-lg-0">
-                            <p style="font-family: 'Song Myung', serif; font-size: 20px;">소준기 조영자의 장남</p>
-                            <h3 style="font-family: 'Song Myung', serif;">신랑 소재영👰🏻‍♂️</h3>
+                            <p class="font-size-lg">소준기 조영자의 장남</p>
+                            <h3>신랑 소재영👰🏻‍♂️</h3>
                             <img src="assets/img/ys.jpg" class="img-fluid rounded-circle" alt="신랑 이미지">
                             <p><br></p>
                                 <ul class="list-inline">
@@ -213,16 +320,16 @@
                                     </li>
                                 </ul>
                                 <div id="foldableSection">
-                                    <p style="font-family: 'Song Myung', serif; font-size: 20px;" class="toggle-button" onclick="toggleFoldable()">혼주 연락처보기<span id="toggleIcon">▼</span></p>
+                                    <p class="toggle-button" onclick="toggleFoldable()">혼주 연락처보기<span id="toggleIcon">▼</span></p>
                                     <div class="foldable-content">
-                                        <p style="font-family: 'Song Myung', serif; font-size: 15px;">소준기    <a href="tel:01000000000"><i class="fa-solid fa-phone fa-sm"></i></a>    <a href="sms:01000000000"><i class="fa-solid fa-envelope fa-sm"></i></a>    <a onclick="groomsFatherAccountNumber(); return false;" href="#!"><i class="fa-solid fa-comments-dollar"></i></a></p>  
-                                        <p style="font-family: 'Song Myung', serif; font-size: 15px;">조영자    <a href="tel:01000000000"><i class="fa-solid fa-phone fa-sm"></i></a>    <a href="sms:01000000000"><i class="fa-solid fa-envelope fa-sm"></i></a></p>  
+                                        <p class="font-size-sm">소준기    <a href="tel:01000000000"><i class="fa-solid fa-phone fa-sm"></i></a>    <a href="sms:01000000000"><i class="fa-solid fa-envelope fa-sm"></i></a>    <a onclick="groomsFatherAccountNumber(); return false;" href="#!"><i class="fa-solid fa-comments-dollar"></i></a></p>  
+                                        <p class="font-size-sm">조영자    <a href="tel:01000000000"><i class="fa-solid fa-phone fa-sm"></i></a>    <a href="sms:01000000000"><i class="fa-solid fa-envelope fa-sm"></i></a></p>  
                                     </div>
                                 </div>
                         </div>
                         <div class="col-lg-6 col-md-6 mb-5 mb-lg-0">
-                            <p style="font-family: 'Song Myung', serif; font-size: 20px;">박한조 김정화의 차녀</p>
-                            <h3 style="font-family: 'Song Myung', serif;">신부 박다은🤵🏻‍♀️</h3>
+                            <p class="font-size-lg">박한조 김정화의 차녀</p>
+                            <h3>신부 박다은🤵🏻‍♀️</h3>
                             <img src="assets/img/jy.jpg" class="img-fluid rounded-circle" alt="신부 이미지">
                             <p><br></p>
                                 <ul class="list-inline">
@@ -235,10 +342,10 @@
                                 </ul>
 
                                 <div id="foldableSection">
-                                    <p style="font-family: 'Song Myung', serif; font-size: 20px;" class="toggle-button" onclick="toggleFoldable2()">혼주 연락처보기<span id="toggleIcon2">▼</span></p>
+                                    <p class="toggle-button" onclick="toggleFoldable2()">혼주 연락처보기<span id="toggleIcon2">▼</span></p>
                                     <div class="foldable-content2">
-                                        <p style="font-family: 'Song Myung', serif; font-size: 15px;">박한조    <a href="tel:01000000000"><i class="fa-solid fa-phone fa-sm"></i></a>    <a href="sms:01000000000"><i class="fa-solid fa-envelope fa-sm"></i></a></p>  
-                                        <p style="font-family: 'Song Myung', serif; font-size: 15px;">김정화    <a href="tel:01000000000"><i class="fa-solid fa-phone fa-sm"></i></a>    <a href="sms:01000000000"><i class="fa-solid fa-envelope fa-sm"></i></a></p>  
+                                        <p class="font-size-sm">박한조    <a href="tel:01000000000"><i class="fa-solid fa-phone fa-sm"></i></a>    <a href="sms:01000000000"><i class="fa-solid fa-envelope fa-sm"></i></a></p>  
+                                        <p class="font-size-sm">김정화    <a href="tel:01000000000"><i class="fa-solid fa-phone fa-sm"></i></a>    <a href="sms:01000000000"><i class="fa-solid fa-envelope fa-sm"></i></a></p>  
                                     </div>
                                 </div>
                         </div>
@@ -250,15 +357,15 @@
             <section class="content-section" id="portfolio">
                 <div class="container px-4 px-lg-5">
                     <div class="content-section-heading text-center">
-                        <p style="font-family: 'Song Myung', serif; font-size: 25px; font-weight: bold;">갤러리</p>
+                        <p class="font-size-xl font-weight-bold">갤러리</p>
                     </div>
                     <div class="row gx-0">
                         <div class="col-lg-6">
                             <a class="portfolio-item" href="pages/studio.html">
                                 <div class="caption">
                                     <div class="caption-content">
-                                        <div class="h2" style="font-family: 'Song Myung', serif;">스튜디오 사진 보러가기</div>
-                                        <p class="mb-0" style="font-family: 'Song Myung', serif;">At IVE Studio</p>
+                                        <div class="h2 font-family-songmyung">스튜디오 사진 보러가기</div>
+                                        <p class="mb-0 font-family-songmyung">At IVE Studio</p>
                                     </div>
                                 </div>
                                 <div class="image-fade">
@@ -270,8 +377,8 @@
                             <a class="portfolio-item" href="pages/jeju.html">
                                 <div class="caption">
                                     <div class="caption-content">
-                                        <div class="h2" style="font-family: 'Song Myung', serif;">제주 스냅 사진 보러가기</div>
-                                        <p class="mb-0" style="font-family: 'Song Myung', serif;">At Jeju Island</p>
+                                        <div class="h2 font-family-songmyung">제주 스냅 사진 보러가기</div>
+                                        <p class="mb-0 font-family-songmyung">At Jeju Island</p>
                                     </div>
                                 </div>
                                 <img class="img-fluid" src="assets/img/jeju-main.jpg" alt="..." />
@@ -281,8 +388,8 @@
                             <a class="portfolio-item" href="pages/self.html">
                                 <div class="caption">
                                     <div class="caption-content">
-                                        <div class="h2" style="font-family: 'Song Myung', serif;">셀프 스냅 사진 보러가기</div>
-                                        <p class="mb-0" style="font-family: 'Song Myung', serif;">Memories of 6 years</p>
+                                        <div class="h2 font-family-songmyung">셀프 스냅 사진 보러가기</div>
+                                        <p class="mb-0 font-family-songmyung">Memories of 6 years</p>
                                     </div>
                                 </div>
                                 <img class="img-fluid" src="assets/img/self-main.jpeg" alt="..." />
@@ -294,22 +401,22 @@
 
             <section class="content-section bg-primary text-white">
                 <div class="container px-4 px-lg-5 text-center">
-                    <p class="mb-4" style="font-family: 'Song Myung', serif; font-size: 20px;">📢2024.03.01 오전 11시 30분📢<br>빌라드지디 청담</p>
-                    <p style="font-family: 'Song Myung', serif; font-size: 16px;"><br>홀에서 예식을 보신 뒤 1층으로 이동하시거나<br>1층에서 스크린으로 예식을 보며 식사 하실 수 있습니다.😊</p>
+                    <p class="mb-4 font-size-lg">📢2025.10.18 토요일 12:00📢<br>대구스타디움 컨벤션</p>
+                    <p class="font-size-md"><br>2층 컨벤션홀에서 예식을 보신 뒤 1층으로 이동하시거나<br>1층에서 스크린으로 예식을 보며 식사 하실 수 있습니다.😊</p>
 
                     <div id="foldableSection">
-                        <p style="font-family: 'Song Myung', serif; font-size: 15px;" class="toggle-button" onclick="toggleFoldable3()">층별 안내<span id="toggleIcon3">▼</span></p>
+                        <p class="toggle-button font-size-sm" onclick="toggleFoldable3()">층별 안내<span id="toggleIcon3">▼</span></p>
                         <div class="foldable-content3" style="display: none;">
-                            <p style="font-family: 'Song Myung', serif; font-size: 10px;">아이콘을 누르시면 페이지로 이동합니다.</p>
-                            <p style="font-family: 'Song Myung', serif; font-size: 12px;">1층  -  연회장<a class="no-style" href="https://chungdamvilladegd.com/CelesteCusine">🍽</a></p>  
-                            <p style="font-family: 'Song Myung', serif; font-size: 12px;">2층  -  메인홀<a class="no-style" href="https://chungdamvilladegd.com/EspaceEmpyree">💒</a></p>  
-                            <p style="font-family: 'Song Myung', serif; font-size: 12px;">3층  -  신부대기실<a class="no-style" href="https://chungdamvilladegd.com/PavillonMariee">👰🏻‍♀️</a></p>  
+                            <p class="font-size-xxxs">아이콘을 누르시면 페이지로 이동합니다.</p>
+                            <p class="font-size-xxs">1층  -  연회장<a class="no-style" href="https://chungdamvilladegd.com/CelesteCusine">🍽</a></p>  
+                            <p class="font-size-xxs">2층  -  메인홀<a class="no-style" href="https://chungdamvilladegd.com/EspaceEmpyree">💒</a></p>  
+                            <p class="font-size-xxs">3층  -  신부대기실<a class="no-style" href="https://chungdamvilladegd.com/PavillonMariee">👰🏻‍♀️</a></p>  
                         </div>
                     </div>
-                    <a class="btn btn-xl btn-light me-4" style="font-family: 'Song Myung', serif; font-size: 12px;" href="https://chungdamvilladegd.com/Location">오시는 길</a>
-                    <a class="btn btn-xl btn-dark" style="font-family: 'Song Myung', serif; font-size: 12px;" href="https://chungdamvilladegd.com/Course">메뉴 보러가기</a>
+                    <a class="btn btn-xl btn-light me-4 font-family-songmyung font-size-xxs" href="https://chungdamvilladegd.com/Location">오시는 길</a>
+                    <a class="btn btn-xl btn-dark font-family-songmyung font-size-xxs" href="https://chungdamvilladegd.com/Course">메뉴 보러가기</a>
 
-                    <p style="font-family: 'Song Myung', serif; font-size: 18px;"><br>축하화환은 정중히 사양합니다.<br>좋은 마음만 감사히 받겠습니다.💐<br></p>
+                    <p class="font-size-lg"><br>축하화환은 정중히 사양합니다.<br>좋은 마음만 감사히 받겠습니다.💐<br></p>
                 </div>
             </section>
 
@@ -327,7 +434,7 @@
                     </div>
                     <div class="my-3 map-container">
                          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3234.7847717741224!2d128.68406357708722!3d35.829756021798545!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x35660998f3925631%3A0x959d7823a728853c!2z7Iqk7YOA65SU7JuAIOy7qOuypOyFmOybqOuUqQ!5e0!3m2!1sko!2skr!4v1751977825309!5m2!1sko!2skr" 
-                                style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" scrolling="no" zoomControl="false"></iframe>
+                                style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" scrolling="no"></iframe>
                     </div>
                 </div>
             </div>
@@ -355,41 +462,30 @@
         </audio>
 
         <script>
-            // 기존 스크롤 이벤트 제거 (봉인 해제 시점에 음악 재생)
-            // window.addEventListener('scroll', function() { ... });
-
             const sealedScreen = document.getElementById('sealed-screen');
             const seal = document.getElementById('seal');
-            const mainWrapper = document.getElementById('main-wrapper'); // 메인 콘텐츠 래퍼
+            const mainWrapper = document.getElementById('main-wrapper'); 
             const audio = document.getElementById('background-music');
 
-            // 봉인 씰 클릭 이벤트 리스너
             seal.addEventListener('click', () => {
-                // 1. 봉인된 화면 숨기기 애니메이션
-                sealedScreen.style.opacity = '0'; // 투명하게 만들고
+                sealedScreen.style.opacity = '0';
                 setTimeout(() => {
-                    sealedScreen.style.display = 'none'; // 완전히 숨김
-                    // 2. 메인 청첩장 콘텐츠 보이기
+                    sealedScreen.style.display = 'none';
                     mainWrapper.style.display = 'block'; 
-                    // 3. 배경 음악 재생
                     audio.play()
                         .then(() => {
                             console.log("음악 재생 시작!");
                         })
                         .catch(error => {
                             console.error("음악 재생 실패:", error);
-                            // 자동 재생 실패 시 사용자에게 재생 버튼을 누르도록 유도하는 메시지 표시 등 추가 가능
                         });
-                }, 1000); // CSS transition 시간(1초)과 동일하게 설정
+                }, 1000); 
             });
 
-            // 페이지 로드 시 스크롤을 맨 위로 이동 (새로고침 시 봉인 화면이 제대로 보이도록)
             window.addEventListener('load', () => {
                 window.scrollTo(0, 0);
             });
 
-            // 기존 스크립트 내용 ...
-        
             // 핀치 줌 비활성화 JavaScript
             document.addEventListener('gesturestart', function (e) {
                 e.preventDefault();
@@ -398,19 +494,31 @@
                 if (event.touches.length > 1) {
                     event.preventDefault();
                 }
-            }, { passive: false }); // passive: false를 추가하여 preventDefault()가 작동하도록 합니다.
-        
+            }, { passive: false });
+
             document.addEventListener('touchmove', function (event) {
                 if (event.touches.length > 1) {
                     event.preventDefault();
                 }
-            }, { passive: false }); // passive: false를 추가하여 preventDefault()가 작동하도록 합니다.
-        
+            }, { passive: false });
+
             document.addEventListener('touchend', function (event) {
                 if (event.touches.length > 1) {
                     event.preventDefault();
                 }
-            });            
+            });
+
+            // 기존에 styles.js에 있던 함수들 (혹은 이 스크립트에 추가)
+            // 예시: toggleFoldable, toggleFoldable2, toggleFoldable3, groomAccountNumber, brideAccountNumber, groomsFatherAccountNumber 등
+            // 이 함수들이 js/scripts.js에 없다면 여기에 정의해야 합니다.
+
+            // 폰트 패밀리 클래스 추가 (Song Myung 폰트를 스타일에서 적용하기 위함)
+            // (이미 <style> 태그 내에서 직접 적용되는 부분이 많아서 이 클래스가 완벽히 적용되지는 않을 수 있습니다.
+            //  이상적인 방법은 모든 폰트 스타일을 CSS 클래스로 관리하는 것입니다.)
+            // .font-family-songmyung { font-family: 'Song Myung', serif; }
+            // .font-family-amaticsc { font-family: 'Amatic SC', sans-serif; }
+            // .font-family-gowundodum { font-family: 'Gowun Dodum', sans-serif; }
+
         </script>        
     </body>
 </html>

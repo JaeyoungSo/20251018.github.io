@@ -387,6 +387,30 @@
             window.addEventListener('load', () => {
                 window.scrollTo(0, 0);
             });
+
+            // 기존 스크립트 내용 ...
+        
+            // 핀치 줌 비활성화 JavaScript
+            document.addEventListener('gesturestart', function (e) {
+                e.preventDefault();
+            });
+            document.addEventListener('touchstart', function (event) {
+                if (event.touches.length > 1) {
+                    event.preventDefault();
+                }
+            }, { passive: false }); // passive: false를 추가하여 preventDefault()가 작동하도록 합니다.
+        
+            document.addEventListener('touchmove', function (event) {
+                if (event.touches.length > 1) {
+                    event.preventDefault();
+                }
+            }, { passive: false }); // passive: false를 추가하여 preventDefault()가 작동하도록 합니다.
+        
+            document.addEventListener('touchend', function (event) {
+                if (event.touches.length > 1) {
+                    event.preventDefault();
+                }
+            });            
         </script>        
     </body>
 </html>

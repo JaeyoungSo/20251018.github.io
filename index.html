@@ -31,8 +31,16 @@
     
     <style>
     .image-fade img {
-      -webkit-mask-image: none;
-      mask-image: none;
+      display: block;
+      width: 100%;
+      height: auto;
+    
+      -webkit-mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
+      mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
+      -webkit-mask-size: 100% 100%;
+      mask-size: 100% 100%;
+      -webkit-mask-repeat: no-repeat;
+      mask-repeat: no-repeat;
     }
     body {
       background: #fbf0ea; /* 원하는 배경색 */
@@ -47,7 +55,7 @@
             <div class="container px-4 px-lg-5 text-center">
                 <h2 class="mb-1"> </h2>
                 <h2 class="mb-1"> </h2>
-                <h2 style="font-family: 'Amatic SC', sans-serif; color: white; font-weight: bold;">8소재영 · 박다은 결혼합니다</h1>
+                <h2 style="font-family: 'Amatic SC', sans-serif; color: white; font-weight: bold;">9소재영 · 박다은 결혼합니다</h1>
                 <br>
                 <!--
                 <h2 style="font-family: 'Amatic SC', sans-serif; color: white; font-weight: bold;">| We invite you to our wedding |</h2>
@@ -63,6 +71,9 @@
                 <div class="row gx-4 gx-lg-5 justify-content-center">
                     <div class="col-lg-10">
                         <p style="font-family: 'Song Myung', serif; font-size: 16px;">
+                            <br>
+                            <br>
+                            <br>
                             저희 두 사람이 변함없는 사랑과 믿음으로
                             <br>
                             이제 하나의 길을 걷고자 합니다.
@@ -148,9 +159,9 @@
                                     <p class="mb-0" style="font-family: 'Song Myung', serif;">At IVE Studio</p>
                                 </div>
                             </div>
-                            <!-- <div class="image-fade"> -->
+                            <div class="image-fade">
                             <img class="img-fluid" src="assets/img/main.jpg" alt="..." />
-                            <!-- </div> -->
+                            </div> 
                         </a>
                     </div>
                     <div class="col-lg-6">

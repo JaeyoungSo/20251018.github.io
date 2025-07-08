@@ -9,13 +9,9 @@
         <meta name="author" content="" />
         <title>재영 · 다은</title>
         <link rel="icon" type="image/x-icon" href="assets/favicon.ico"/>
-        <!-- Font Awesome icons (free version)-->
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
-        <!-- Simple line icons-->
         <link href="https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.5.5/css/simple-line-icons.min.css" rel="stylesheet" />
-        <!-- Google fonts-->
         <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css" />
-        <!-- Core theme CSS (includes Bootstrap)-->
         <link href="css/styles.css" rel="stylesheet" />
         
         <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -26,7 +22,6 @@
 
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         
-
     </head>
     
     <style>
@@ -34,7 +29,7 @@
       display: block;
       width: 100%;
       height: auto;
-    
+      
       /* 아래로 갈수록 점점 투명해지는 마스크 */
       -webkit-mask-image: linear-gradient(to bottom, black 85%, transparent 100%);
       mask-image: linear-gradient(to bottom, black 85%, transparent 100%);
@@ -73,259 +68,309 @@
       position: relative;
       z-index: 3;
     }
-        
+
+    /* 봉인된 화면 스타일 */
+    #sealed-screen {
+        position: fixed;
+        top: 0; left: 0;
+        width: 100vw; height: 100vh;
+        background-color: #fbf0ea; /* 청첩장 배경색과 동일하게 또는 어울리게 */
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999; /* 다른 콘텐츠 위에 확실히 보이도록 높은 z-index 설정 */
+        transition: opacity 1s ease-out; /* 사라지는 애니메이션 */
+    }
+    #seal {
+        width: 180px; /* 씰 크기 조절 */
+        height: 180px;
+        background: url('assets/img/seal.png') no-repeat center center; /* 봉인 씰 이미지 경로 (추가 필요) */
+        background-size: contain;
+        cursor: pointer;
+        animation: pulse 1.5s infinite; /* 봉인 씰 깜빡임 효과 */
+        -webkit-tap-highlight-color: transparent; /* 모바일 터치 시 하이라이트 제거 */
+    }
+    #seal-text {
+        margin-top: 25px; /* 씰과 텍스트 간격 조절 */
+        font-size: 1.2em; /* 텍스트 크기 조절 */
+        color: #555;
+        font-family: 'Song Myung', serif; /* 폰트 적용 */
+        text-align: center;
+        line-height: 1.5;
+    }
+    /* 봉인 씰 깜빡임 애니메이션 */
+    @keyframes pulse {
+        0% { transform: scale(1); opacity: 1; }
+        50% { transform: scale(1.05); opacity: 0.8; }
+        100% { transform: scale(1); opacity: 1; }
+    }
+
+    /* 메인 콘텐츠는 초기에는 숨김 */
+    #main-wrapper {
+        display: none;
+    }
+
     </style>
     
     <body id="page-top">
 
-        <!-- Header-->
-        <header class="masthead d-flex align-items-center">
-          <div class="gradient-fade"></div> <!-- 추가된 흐림 오버레이 -->
-          <div class="container px-4 px-lg-5 text-center">
-            <h2 class="mb-1"> </h2>
-            <h2 class="mb-1"> </h2>
-            <h2 style="font-family: 'Amatic SC', sans-serif; color: white; font-weight: bold;">1소재영 · 박다은 결혼합니다</h2>
-            <br>
-            <p style="font-family: 'Song Myung', serif; color: white; font-size: 13px;"><br>2025.10.18 토요일 12:00<br>대구스타디움 컨벤션<br>2층 컨벤션홀</p>
-          </div>
-        </header>  
- 
-        <!-- Contents -->
-        <!-- <section class="content-section bg-light" id="about"> -->
-        <section id="about">
-            <div class="container px-4 px-lg-5 text-center">
-                <div class="row gx-4 gx-lg-5 justify-content-center">
-                    <div class="col-lg-10">
-                        <p style="font-family: 'Song Myung', serif; font-size: 16px;">
-                            <br>
-                            <br>
-                            <br>
-                            저희 두 사람이 변함없는 사랑과 믿음으로
-                            <br>
-                            이제 하나의 길을 걷고자 합니다.
-                            <br>
-                            오셔서 축복하여 주시면
-                            <br> 
-                            더없는 기쁨으로 간직하겠습니다.
-                        </p>
-                        <h2 style="font-family: 'Song Myung', serif; font-size: 20px; "><br>소준기 · 조영자의 장남  &nbsp;&nbsp; 소재영 <br>
-                                                                          박한조 · 김정화의 차녀  &nbsp;&nbsp; 박다은 <br> 
-                        </h2>
-                        <p style="font-family: 'Song Myung', serif; font-size: 16px;">
-                        </p>
-
-                        <p style="font-family: 'Song Myung', serif; font-size: 16px;">
-                            <br>
-                            <br>
-                            <br>
-                            <br>
-                            <br>
-                            <br>                            
-                            신랑 신부에게 축하의 말 전하기
-                            <br>
-                        </p>
-                        <hr style="border: none; border-top: 1px solid rgba(0, 0, 0, 0.3); margin: 30px 0;">
-                        <iframe src="https://padlet.com/threeout56/padlet-lf0wod6kw6eresgw" frameborder="0" width="100%" height="600" style="border:0;" allowfullscreen></iframe>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Introduction -->
-        <section class="content-section bg-primary text-white text-center" id="services">
-            <div class="container px-4 px-lg-5">
-                <div class="content-section-heading">
-                    <p style="font-family: 'Song Myung', serif; font-size: 25px; font-weight: bold;">신랑&신부</p>
-                </div>
-                <br>
-                <div class="row gx-4 gx-lg-5">
-                    <div class="col-lg-6 col-md-6 mb-5 mb-lg-0">
-                        <p style="font-family: 'Song Myung', serif; font-size: 20px;">소재영 조영자의 장남</p>
-                        <h3 style="font-family: 'Song Myung', serif;">신랑 소재영👰🏻‍♂️</h3>
-                        <img src="assets/img/ys.jpg" class="img-fluid rounded-circle" alt="신랑 이미지">
-                        <p><br></p>
-                            <ul class="list-inline">
-                                <li class="list-inline-item">
-                                    <a class="social-link rounded-circle text-white mr-3" href="xxxxxxx"><i class="fa-solid fa-phone"></i></a>
-                                </li>
-                                <li class="list-inline-item">
-                                    <a class="social-link rounded-circle text-white mr-3" onclick="groomAccountNumber(); return false;" href="#!"><i class="fa-solid fa-comments-dollar"></i></a>
-                                </li>
-                            </ul>
-                            <div id="foldableSection">
-                                <p style="font-family: 'Song Myung', serif; font-size: 20px;" class="toggle-button" onclick="toggleFoldable()">혼주 연락처보기<span id="toggleIcon">▼</span></p>
-                                <div class="foldable-content">
-                                    <p style="font-family: 'Song Myung', serif; font-size: 15px;">최재혁&nbsp;&nbsp;&nbsp;<a href="tel:01000000000"><i class="fa-solid fa-phone fa-sm"></i></a>&nbsp;&nbsp;&nbsp;<a href="sms:01000000000"><i class="fa-solid fa-envelope fa-sm"></i></a>&nbsp;&nbsp;&nbsp;<a onclick="groomsFatherAccountNumber(); return false;" href="#!"><i class="fa-solid fa-comments-dollar"></i></a></p>  
-                                    <p style="font-family: 'Song Myung', serif; font-size: 15px;">조미희&nbsp;&nbsp;&nbsp;<a href="tel:01000000000"><i class="fa-solid fa-phone fa-sm"></i></a>&nbsp;&nbsp;&nbsp;<a href="sms:01000000000"><i class="fa-solid fa-envelope fa-sm"></i></a></p>  
-                                </div>
-                            </div>
-                    </div>
-                    <div class="col-lg-6 col-md-6 mb-5 mb-lg-0">
-                        <p style="font-family: 'Song Myung', serif; font-size: 20px;">이병관 안성원의 장녀</p>
-                        <h3 style="font-family: 'Song Myung', serif;">신부 이재윤🤵🏻‍♀️</h3>
-                        <img src="assets/img/jy.jpg" class="img-fluid rounded-circle" alt="신부 이미지">
-                        <p><br></p>
-                            <ul class="list-inline">
-                                <li class="list-inline-item">
-                                    <a class="social-link rounded-circle text-white mr-5" href="xxxxxxx"><i class="fa-solid fa-phone"></i></a>
-                                </li>
-                                <li class="list-inline-item">
-                                    <a class="social-link rounded-circle text-white mr-5" onclick="brideAccountNumber(); return false;" href="#!"><i class="fa-solid fa-comments-dollar"></i></a>
-                                </li>
-                            </ul>
-
-                            <div id="foldableSection">
-                                <p style="font-family: 'Song Myung', serif; font-size: 20px;" class="toggle-button" onclick="toggleFoldable2()">혼주 연락처보기<span id="toggleIcon2">▼</span></p>
-                                <div class="foldable-content2">
-                                    <p style="font-family: 'Song Myung', serif; font-size: 15px;">이병관&nbsp;&nbsp;&nbsp;<a href="tel:01000000000"><i class="fa-solid fa-phone fa-sm"></i></a>&nbsp;&nbsp;&nbsp;<a href="sms:01000000000"><i class="fa-solid fa-envelope fa-sm"></i></a></p>  
-                                    <p style="font-family: 'Song Myung', serif; font-size: 15px;">안성원&nbsp;&nbsp;&nbsp;<a href="tel:01000000000"><i class="fa-solid fa-phone fa-sm"></i></a>&nbsp;&nbsp;&nbsp;<a href="sms:01000000000"><i class="fa-solid fa-envelope fa-sm"></i></a></p>  
-                                </div>
-                            </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-        
-        
-        <!-- Photo Zone -->
-        <section class="content-section" id="portfolio">
-            <div class="container px-4 px-lg-5">
-                <div class="content-section-heading text-center">
-                    <p style="font-family: 'Song Myung', serif; font-size: 25px; font-weight: bold;">갤러리</p>
-                </div>
-                <div class="row gx-0">
-                    <div class="col-lg-6">
-                        <a class="portfolio-item" href="pages/studio.html">
-                            <div class="caption">
-                                <div class="caption-content">
-                                    <div class="h2" style="font-family: 'Song Myung', serif;">스튜디오 사진 보러가기</div>
-                                    <p class="mb-0" style="font-family: 'Song Myung', serif;">At IVE Studio</p>
-                                </div>
-                            </div>
-                            <div class="image-fade">
-                            <img class="img-fluid" src="assets/img/main.jpg" alt="..." />
-                            </div> 
-                        </a>
-                    </div>
-                    <div class="col-lg-6">
-                        <a class="portfolio-item" href="pages/jeju.html">
-                            <div class="caption">
-                                <div class="caption-content">
-                                    <div class="h2" style="font-family: 'Song Myung', serif;">제주 스냅 사진 보러가기</div>
-                                    <p class="mb-0" style="font-family: 'Song Myung', serif;">At Jeju Island</p>
-                                </div>
-                            </div>
-                            <img class="img-fluid" src="assets/img/jeju-main.jpg" alt="..." />
-                        </a>
-                    </div>
-                    <div class="col-lg-6">
-                        <a class="portfolio-item" href="pages/self.html">
-                            <div class="caption">
-                                <div class="caption-content">
-                                    <div class="h2" style="font-family: 'Song Myung', serif;">셀프 스냅 사진 보러가기</div>
-                                    <p class="mb-0" style="font-family: 'Song Myung', serif;">Memories of 6 years</p>
-                                </div>
-                            </div>
-                            <img class="img-fluid" src="assets/img/self-main.jpeg" alt="..." />
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Information -->
-        <section class="content-section bg-primary text-white">
-            <div class="container px-4 px-lg-5 text-center">
-                <p class="mb-4" style="font-family: 'Song Myung', serif; font-size: 20px;">📢2024.03.01 오전 11시 30분📢<br>빌라드지디 청담</p>
-                <p style="font-family: 'Song Myung', serif; font-size: 16px;"><br>홀에서 예식을 보신 뒤 1층으로 이동하시거나<br>1층에서 스크린으로 예식을 보며 식사 하실 수 있습니다.😊</p>
-
-                <div id="foldableSection">
-                    <p style="font-family: 'Song Myung', serif; font-size: 15px;" class="toggle-button" onclick="toggleFoldable3()">층별 안내<span id="toggleIcon3">▼</span></p>
-                    <div class="foldable-content3" style="display: none;">
-                        <p style="font-family: 'Song Myung', serif; font-size: 10px;">아이콘을 누르시면 페이지로 이동합니다.</p>
-                        <p style="font-family: 'Song Myung', serif; font-size: 12px;">1층&nbsp;&nbsp;-&nbsp;&nbsp;연회장<a class="no-style" href="https://chungdamvilladegd.com/CelesteCusine">🍽</a></p>  
-                        <p style="font-family: 'Song Myung', serif; font-size: 12px;">2층&nbsp;&nbsp;-&nbsp;&nbsp;메인홀<a class="no-style" href="https://chungdamvilladegd.com/EspaceEmpyree">💒</a></p>  
-                        <p style="font-family: 'Song Myung', serif; font-size: 12px;">3층&nbsp;&nbsp;-&nbsp;&nbsp;신부대기실<a class="no-style" href="https://chungdamvilladegd.com/PavillonMariee">👰🏻‍♀️</a></p>  
-                    </div>
-                </div>
-                <a class="btn btn-xl btn-light me-4" style="font-family: 'Song Myung', serif; font-size: 12px;" href="https://chungdamvilladegd.com/Location">오시는 길</a>
-                <a class="btn btn-xl btn-dark" style="font-family: 'Song Myung', serif; font-size: 12px;" href="https://chungdamvilladegd.com/Course">메뉴 보러가기</a>
-
-                <p style="font-family: 'Song Myung', serif; font-size: 18px;"><br>축하화환은 정중히 사양합니다.<br>좋은 마음만 감사히 받겠습니다.💐<br></p>
-            </div>
-        </section>
-
-        <!-- Map-->
-        <div class="form-group">
-            <div class="col-md-12">
-                <div class="my-3 text-center">
-                    <a href="https://naver.me/xM28SuGC">
-                        <img alt="naver-map" class="map-icon" id="naver-map"
-                             src="assets/img/map/naver-map.png"/>
-                    </a>
-                    <a href="https://kko.to/NYdZbVMERT">
-                        <img alt="kakao-map" class="map-icon" id="kakao-map"
-                             src="assets/img/map/kakao-map.png"/>
-                    </a>
-                    <a href="https://maps.app.goo.gl/LwnLrfGHoNFKWo1A6">
-                        <img alt="google-map" class="map-icon" id="google-map"
-                             src="assets/img/map/google-map.png"/>
-                    </a>
-                </div>
-                <div class="my-3">
-                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d12939.137026760576!2d128.6763387114493!3d35.829768657823834!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x35660998f3925631%3A0x959d7823a728853c!2z7Iqk7YOA65SU7JuAIOy7qOuypOyFmOybqOuUqQ!5e0!3m2!1sko!2skr!4v1751949038885!5m2!1sko!2skr" width="100%" height="400" frameborder="0" style="border:0" allowfullscreen></iframe>
-                </div>
-            </div>
+        <div id="sealed-screen">
+            <div id="seal"></div>
+            <p id="seal-text">
+                두 사람의 소중한 시작<br>
+                봉인을 해제하고 함께 해주세요
+            </p>
         </div>
 
-        <!-- Footer-->
-        <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
-        <footer class="footer text-center">
-            <div class="container px-4 px-lg-5">
-                <ul class="list-inline">
-                    <li class="list-inline-item">
-                        <a class="social-link rounded-circle text-white mr-5" title="카카오톡으로 공유하기" href="javascript:kakaoShare()"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>
-                    </li>
-                    <li class="list-inline-item">
-                        <a class="social-link rounded-circle text-white mr-5" title="링크 복사하기" onclick="copyLink(); return false;" href="#!"><i class="fa-solid fa-link"></i></a>
-                    </li>
-                </ul>
-                <p class="text-muted small mb-0" style="font-family: 'Gowun Dodum', sans-serif;">Made By zzaeyun</p>
+        <div id="main-wrapper">
+            <header class="masthead d-flex align-items-center">
+                <div class="gradient-fade"></div> <div class="container px-4 px-lg-5 text-center">
+                    <h2 class="mb-1"> </h2>
+                    <h2 class="mb-1"> </h2>
+                    <h2 style="font-family: 'Amatic SC', sans-serif; color: white; font-weight: bold;">소재영 · 박다은 결혼합니다</h2>
+                    <br>
+                    <p style="font-family: 'Song Myung', serif; color: white; font-size: 13px;"><br>2025.10.18 토요일 12:00<br>대구스타디움 컨벤션<br>2층 컨벤션홀</p>
+                </div>
+            </header> 
+            
+            <section id="about">
+                <div class="container px-4 px-lg-5 text-center">
+                    <div class="row gx-4 gx-lg-5 justify-content-center">
+                        <div class="col-lg-10">
+                            <p style="font-family: 'Song Myung', serif; font-size: 16px;">
+                                <br>
+                                <br>
+                                <br>
+                                저희 두 사람이 변함없는 사랑과 믿음으로
+                                <br>
+                                이제 하나의 길을 걷고자 합니다.
+                                <br>
+                                오셔서 축복하여 주시면
+                                <br> 
+                                더없는 기쁨으로 간직하겠습니다.
+                            </p>
+                            <h2 style="font-family: 'Song Myung', serif; font-size: 20px; "><br>소준기 · 조영자의 장남    소재영 <br>
+                                                                                                박한조 · 김정화의 차녀    박다은 <br> 
+                            </h2>
+                            <p style="font-family: 'Song Myung', serif; font-size: 16px;">
+                            </p>
+
+                            <p style="font-family: 'Song Myung', serif; font-size: 16px;">
+                                <br>
+                                <br>
+                                <br>
+                                <br>
+                                <br>
+                                <br> 
+                                신랑 신부에게 축하의 말 전하기
+                                <br>
+                            </p>
+                            <hr style="border: none; border-top: 1px solid rgba(0, 0, 0, 0.3); margin: 30px 0;">
+                            <iframe src="https://padlet.com/threeout56/padlet-lf0wod6kw6eresgw" frameborder="0" width="100%" height="600" style="border:0;" allowfullscreen></iframe>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="content-section bg-primary text-white text-center" id="services">
+                <div class="container px-4 px-lg-5">
+                    <div class="content-section-heading">
+                        <p style="font-family: 'Song Myung', serif; font-size: 25px; font-weight: bold;">신랑&신부</p>
+                    </div>
+                    <br>
+                    <div class="row gx-4 gx-lg-5">
+                        <div class="col-lg-6 col-md-6 mb-5 mb-lg-0">
+                            <p style="font-family: 'Song Myung', serif; font-size: 20px;">소준기 조영자의 장남</p>
+                            <h3 style="font-family: 'Song Myung', serif;">신랑 소재영👰🏻‍♂️</h3>
+                            <img src="assets/img/ys.jpg" class="img-fluid rounded-circle" alt="신랑 이미지">
+                            <p><br></p>
+                                <ul class="list-inline">
+                                    <li class="list-inline-item">
+                                        <a class="social-link rounded-circle text-white mr-3" href="xxxxxxx"><i class="fa-solid fa-phone"></i></a>
+                                    </li>
+                                    <li class="list-inline-item">
+                                        <a class="social-link rounded-circle text-white mr-3" onclick="groomAccountNumber(); return false;" href="#!"><i class="fa-solid fa-comments-dollar"></i></a>
+                                    </li>
+                                </ul>
+                                <div id="foldableSection">
+                                    <p style="font-family: 'Song Myung', serif; font-size: 20px;" class="toggle-button" onclick="toggleFoldable()">혼주 연락처보기<span id="toggleIcon">▼</span></p>
+                                    <div class="foldable-content">
+                                        <p style="font-family: 'Song Myung', serif; font-size: 15px;">소준기   <a href="tel:01000000000"><i class="fa-solid fa-phone fa-sm"></i></a>   <a href="sms:01000000000"><i class="fa-solid fa-envelope fa-sm"></i></a>   <a onclick="groomsFatherAccountNumber(); return false;" href="#!"><i class="fa-solid fa-comments-dollar"></i></a></p>  
+                                        <p style="font-family: 'Song Myung', serif; font-size: 15px;">조영자   <a href="tel:01000000000"><i class="fa-solid fa-phone fa-sm"></i></a>   <a href="sms:01000000000"><i class="fa-solid fa-envelope fa-sm"></i></a></p>  
+                                    </div>
+                                </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 mb-5 mb-lg-0">
+                            <p style="font-family: 'Song Myung', serif; font-size: 20px;">박한조 김정화의 차녀</p>
+                            <h3 style="font-family: 'Song Myung', serif;">신부 박다은🤵🏻‍♀️</h3>
+                            <img src="assets/img/jy.jpg" class="img-fluid rounded-circle" alt="신부 이미지">
+                            <p><br></p>
+                                <ul class="list-inline">
+                                    <li class="list-inline-item">
+                                        <a class="social-link rounded-circle text-white mr-5" href="xxxxxxx"><i class="fa-solid fa-phone"></i></a>
+                                    </li>
+                                    <li class="list-inline-item">
+                                        <a class="social-link rounded-circle text-white mr-5" onclick="brideAccountNumber(); return false;" href="#!"><i class="fa-solid fa-comments-dollar"></i></a>
+                                    </li>
+                                </ul>
+
+                                <div id="foldableSection">
+                                    <p style="font-family: 'Song Myung', serif; font-size: 20px;" class="toggle-button" onclick="toggleFoldable2()">혼주 연락처보기<span id="toggleIcon2">▼</span></p>
+                                    <div class="foldable-content2">
+                                        <p style="font-family: 'Song Myung', serif; font-size: 15px;">박한조   <a href="tel:01000000000"><i class="fa-solid fa-phone fa-sm"></i></a>   <a href="sms:01000000000"><i class="fa-solid fa-envelope fa-sm"></i></a></p>  
+                                        <p style="font-family: 'Song Myung', serif; font-size: 15px;">김정화   <a href="tel:01000000000"><i class="fa-solid fa-phone fa-sm"></i></a>   <a href="sms:01000000000"><i class="fa-solid fa-envelope fa-sm"></i></a></p>  
+                                    </div>
+                                </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            
+            <section class="content-section" id="portfolio">
+                <div class="container px-4 px-lg-5">
+                    <div class="content-section-heading text-center">
+                        <p style="font-family: 'Song Myung', serif; font-size: 25px; font-weight: bold;">갤러리</p>
+                    </div>
+                    <div class="row gx-0">
+                        <div class="col-lg-6">
+                            <a class="portfolio-item" href="pages/studio.html">
+                                <div class="caption">
+                                    <div class="caption-content">
+                                        <div class="h2" style="font-family: 'Song Myung', serif;">스튜디오 사진 보러가기</div>
+                                        <p class="mb-0" style="font-family: 'Song Myung', serif;">At IVE Studio</p>
+                                    </div>
+                                </div>
+                                <div class="image-fade">
+                                <img class="img-fluid" src="assets/img/main.jpg" alt="..." />
+                                </div> 
+                            </a>
+                        </div>
+                        <div class="col-lg-6">
+                            <a class="portfolio-item" href="pages/jeju.html">
+                                <div class="caption">
+                                    <div class="caption-content">
+                                        <div class="h2" style="font-family: 'Song Myung', serif;">제주 스냅 사진 보러가기</div>
+                                        <p class="mb-0" style="font-family: 'Song Myung', serif;">At Jeju Island</p>
+                                    </div>
+                                </div>
+                                <img class="img-fluid" src="assets/img/jeju-main.jpg" alt="..." />
+                            </a>
+                        </div>
+                        <div class="col-lg-6">
+                            <a class="portfolio-item" href="pages/self.html">
+                                <div class="caption">
+                                    <div class="caption-content">
+                                        <div class="h2" style="font-family: 'Song Myung', serif;">셀프 스냅 사진 보러가기</div>
+                                        <p class="mb-0" style="font-family: 'Song Myung', serif;">Memories of 6 years</p>
+                                    </div>
+                                </div>
+                                <img class="img-fluid" src="assets/img/self-main.jpeg" alt="..." />
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="content-section bg-primary text-white">
+                <div class="container px-4 px-lg-5 text-center">
+                    <p class="mb-4" style="font-family: 'Song Myung', serif; font-size: 20px;">📢2024.03.01 오전 11시 30분📢<br>빌라드지디 청담</p>
+                    <p style="font-family: 'Song Myung', serif; font-size: 16px;"><br>홀에서 예식을 보신 뒤 1층으로 이동하시거나<br>1층에서 스크린으로 예식을 보며 식사 하실 수 있습니다.😊</p>
+
+                    <div id="foldableSection">
+                        <p style="font-family: 'Song Myung', serif; font-size: 15px;" class="toggle-button" onclick="toggleFoldable3()">층별 안내<span id="toggleIcon3">▼</span></p>
+                        <div class="foldable-content3" style="display: none;">
+                            <p style="font-family: 'Song Myung', serif; font-size: 10px;">아이콘을 누르시면 페이지로 이동합니다.</p>
+                            <p style="font-family: 'Song Myung', serif; font-size: 12px;">1층  -  연회장<a class="no-style" href="https://chungdamvilladegd.com/CelesteCusine">🍽</a></p>  
+                            <p style="font-family: 'Song Myung', serif; font-size: 12px;">2층  -  메인홀<a class="no-style" href="https://chungdamvilladegd.com/EspaceEmpyree">💒</a></p>  
+                            <p style="font-family: 'Song Myung', serif; font-size: 12px;">3층  -  신부대기실<a class="no-style" href="https://chungdamvilladegd.com/PavillonMariee">👰🏻‍♀️</a></p>  
+                        </div>
+                    </div>
+                    <a class="btn btn-xl btn-light me-4" style="font-family: 'Song Myung', serif; font-size: 12px;" href="https://chungdamvilladegd.com/Location">오시는 길</a>
+                    <a class="btn btn-xl btn-dark" style="font-family: 'Song Myung', serif; font-size: 12px;" href="https://chungdamvilladegd.com/Course">메뉴 보러가기</a>
+
+                    <p style="font-family: 'Song Myung', serif; font-size: 18px;"><br>축하화환은 정중히 사양합니다.<br>좋은 마음만 감사히 받겠습니다.💐<br></p>
+                </div>
+            </section>
+
+            <div class="form-group">
+                <div class="col-md-12">
+                    <div class="my-3 text-center">
+                        <a href="https://naver.me/xM28SuGC">
+                            <img alt="naver-map" class="map-icon" id="naver-map"
+                                src="assets/img/map/naver-map.png"/>
+                        </a>
+                        <a href="https://kko.to/NYdZbVMERT">
+                            <img alt="kakao-map" class="map-icon" id="kakao-map"
+                                src="assets/img/map/kakao-map.png"/>
+                        </a>
+                        <a href="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d12939.137026760576!2d128.6763387114493!3d35.829768657823834!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x35660998f3925631%3A0x959d7823a728853c!2z7Iqk7YOA65SU7JuAIOy7qOuypOyFmOybqOuUqQ!5e0!3m2!1sko!2skr!4v1751949038885!5m2!1sko!2skr">
+                            <img alt="google-map" class="map-icon" id="google-map"
+                                src="assets/img/map/google-map.png"/>
+                        </a>
+                    </div>
+                    <div class="my-3">
+                        <iframe src="http://googleusercontent.com/maps.google.com/16" width="100%" height="400" frameborder="0" style="border:0" allowfullscreen></iframe>
+                    </div>
+                </div>
             </div>
-        </footer>
-       
-        <!-- Bootstrap core JS-->
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-        <!-- Core theme JS-->
+
+            <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
+            <footer class="footer text-center">
+                <div class="container px-4 px-lg-5">
+                    <ul class="list-inline">
+                        <li class="list-inline-item">
+                            <a class="social-link rounded-circle text-white mr-5" title="카카오톡으로 공유하기" href="javascript:kakaoShare()"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+                        </li>
+                        <li class="list-inline-item">
+                            <a class="social-link rounded-circle text-white mr-5" title="링크 복사하기" onclick="copyLink(); return false;" href="#!"><i class="fa-solid fa-link"></i></a>
+                        </li>
+                    </ul>
+                    <p class="text-muted small mb-0" style="font-family: 'Gowun Dodum', sans-serif;">Made By zzaeyun</p>
+                </div>
+            </footer>
+        </div> <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
         <script src="js/scripts.js"></script>
 
-        <audio id="background-music" controls autoplay loop style="display:none;">
-          <source src="assets/September.mp3" type="audio/mpeg">
-          Your browser does not support the audio element.
+        <audio id="background-music" loop preload="auto">
+            <source src="assets/September.mp3" type="audio/mpeg">
+            Your browser does not support the audio element.
         </audio>
 
-      <script>
-        const audio = document.getElementById('background-music');
-        let hasPlayed = false; // 음악이 이미 재생되었는지 여부 확인
-    
-        window.addEventListener('scroll', function() {
-          // 스크롤 위치가 특정 지점을 넘었을 때 (예: 500px)
-          // 또는 특정 요소가 화면에 나타났을 때 트리거할 수 있습니다.
-          if (window.scrollY > 20 && !hasPlayed) {
-            audio.play()
-              .then(() => {
-                console.log("음악 재생 시작!");
-                hasPlayed = true; // 재생 성공 시 플래그 설정
-              })
-              .catch(error => {
-                console.error("음악 재생 실패:", error);
-                // 자동 재생이 여전히 차단될 경우 사용자에게 알림 또는 버튼 제공
-              });
-          }
-        });
-    
-        // 참고: 사용자가 너무 빨리 스크롤하여 재생이 안 될 경우를 대비해
-        // 첫 스크롤 시도 후에도 재생이 안되면 다른 상호작용(클릭 등)으로 유도하는 것이 좋습니다.
-      </script>        
+        <script>
+            // 기존 스크롤 이벤트 제거 (봉인 해제 시점에 음악 재생)
+            // window.addEventListener('scroll', function() { ... });
+
+            const sealedScreen = document.getElementById('sealed-screen');
+            const seal = document.getElementById('seal');
+            const mainWrapper = document.getElementById('main-wrapper'); // 메인 콘텐츠 래퍼
+            const audio = document.getElementById('background-music');
+
+            // 봉인 씰 클릭 이벤트 리스너
+            seal.addEventListener('click', () => {
+                // 1. 봉인된 화면 숨기기 애니메이션
+                sealedScreen.style.opacity = '0'; // 투명하게 만들고
+                setTimeout(() => {
+                    sealedScreen.style.display = 'none'; // 완전히 숨김
+                    // 2. 메인 청첩장 콘텐츠 보이기
+                    mainWrapper.style.display = 'block'; 
+                    // 3. 배경 음악 재생
+                    audio.play()
+                        .then(() => {
+                            console.log("음악 재생 시작!");
+                        })
+                        .catch(error => {
+                            console.error("음악 재생 실패:", error);
+                            // 자동 재생 실패 시 사용자에게 재생 버튼을 누르도록 유도하는 메시지 표시 등 추가 가능
+                        });
+                }, 1000); // CSS transition 시간(1초)과 동일하게 설정
+            });
+
+            // 페이지 로드 시 스크롤을 맨 위로 이동 (새로고침 시 봉인 화면이 제대로 보이도록)
+            window.addEventListener('load', () => {
+                window.scrollTo(0, 0);
+            });
+        </script>     
     </body>
 </html>

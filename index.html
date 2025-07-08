@@ -78,10 +78,10 @@
     
     <body id="page-top">
 
-    <audio controls autoplay loop style="display:none;">
-      <source src="assets/September.mp3" type="audio/mpeg">
-      Your browser does not support the audio element.
-    </audio>
+<audio id="background-music" controls autoplay loop style="display:none;">
+  <source src="assets/September.mp3" type="audio/mpeg">
+  Your browser does not support the audio element.
+</audio>
 
       <script>
         const audio = document.getElementById('background-music');
@@ -90,7 +90,7 @@
         window.addEventListener('scroll', function() {
           // 스크롤 위치가 특정 지점을 넘었을 때 (예: 500px)
           // 또는 특정 요소가 화면에 나타났을 때 트리거할 수 있습니다.
-          if (window.scrollY > 10 && !hasPlayed) {
+          if (window.scrollY > 20 && !hasPlayed) {
             audio.play()
               .then(() => {
                 console.log("음악 재생 시작!");

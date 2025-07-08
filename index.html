@@ -46,32 +46,49 @@
     body {
       background: #fbf0ea; /* 원하는 배경색 */
     }
+
+    .masthead {
+      position: relative;
+      background-image: url('assets/img/main.jpg');
+      background-size: cover;
+      background-position: center;
+      height: 100vh; /* 필요에 따라 조절 */
+      overflow: hidden;
+    }
+    
+    /* 흐림 효과를 위한 오버레이 */
+    .gradient-fade {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 20%; /* 흐림 높이 조절 */
+      background: linear-gradient(to bottom, rgba(255, 240, 234, 0) 0%, #fbf0ea 100%);
+      pointer-events: none; /* 클릭 방지 */
+      z-index: 2;
+    }
+    
+    /* 텍스트를 이미지 위에 위치하도록 */
+    .masthead .container {
+      position: relative;
+      z-index: 3;
+    }
         
     </style>
     
     <body id="page-top">
 
         <!-- Header-->
-        <!--
         <header class="masthead d-flex align-items-center">
-            <div class="container px-4 px-lg-5 text-center">
-                <h2 class="mb-1"> </h2>
-                <h2 class="mb-1"> </h2>
-                <h2 style="font-family: 'Amatic SC', sans-serif; color: white; font-weight: bold;">0소재영 · 박다은 결혼합니다</h2>
-                <br>
-                <p style="font-family: 'Song Myung', serif; color: white; font-size: 13px;"><br>2025.10.18 토요일 12:00<br>대구스타디움 컨벤션<br>2층 컨벤션홀</p>
-            </div>
-        </header>
-        -->
-        <header class="masthead">
-          <div class="image-fade">
-            <img src="assets/img/main.jpg" class="img-fluid" alt="메인 이미지" />
-          </div>
-          <div class="masthead-text text-center">
+          <div class="gradient-fade"></div> <!-- 추가된 흐림 오버레이 -->
+          <div class="container px-4 px-lg-5 text-center">
+            <h2 class="mb-1"> </h2>
+            <h2 class="mb-1"> </h2>
             <h2 style="font-family: 'Amatic SC', sans-serif; color: white; font-weight: bold;">9소재영 · 박다은 결혼합니다</h2>
-            <p style="font-family: 'Song Myung', serif; color: white; font-size: 13px;">2025.10.18 토요일 12:00<br>대구스타디움 컨벤션<br>2층 컨벤션홀</p>
+            <br>
+            <p style="font-family: 'Song Myung', serif; color: white; font-size: 13px;"><br>2025.10.18 토요일 12:00<br>대구스타디움 컨벤션<br>2층 컨벤션홀</p>
           </div>
-        </header>        
+        </header>  
         
 
         <!-- Contents -->

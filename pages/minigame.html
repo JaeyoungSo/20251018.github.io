@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>기억력 카드 게임</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden; /* 스크롤 방지 */
+            display: flex; 
+            flex-direction: column; 
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f0f8ff; 
+            font-family: 'Arial', sans-serif;
+            color: #333;
+            user-select: none; 
+            -webkit-user-select: none; 
+            -moz-user-select: none; 
+            -ms-user-select: none; 
+            touch-action: manipulation; 
+        }
+
+        #game-container {
+            position: absolute; /* 뷰포트 기준으로 위치 고정 */
+            top: 50%; 
+            left: 50%;
+            transform: translate(-50%, -50%); /* 정확한 중앙 정렬 */
+            
+            width: 90vw; /* 뷰포트 너비의 90%를 기본 너비로 사용 */
+            max-width: 600px; /* 최대 너비 제한 */
+            padding: 10px;
+            background-color: #e6f7ff;
+            border: 2px solid #aaddff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: var(--game-container-height); /* JS에서 계산된 높이 고정 */
+            transition: height 0.3s ease-out; 
+            box-sizing: border-box; /* padding 포함 너비 계산 */
+        }
+
+        #game-info {
+            width: 100%;
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #555;
+            position: relative; 
+            z-index: 101; /* 셔플 카드(z-index: 100)보다 높게 설정 */
+            background-color: #e6f7ff; /* game-container와 동일한 배경색으로 카드 비침 방지 */
+            padding-bottom: 5px; 
+        }
+
+        #card-grid {
+            display: grid; 
+            grid-template-columns: repeat(4, 1fr); 
+            grid-template-rows: repeat(4, 1fr); 
+            gap: 10px; 
+            width: 100%;
+            max-width: 500px; /* 카드 그리드 최대 너비 */
+            aspect-ratio: 1 / 1; /* 가로세로 비율 1:1 유지 */
+            flex-grow: 1; /* 남은 공간을 차지하도록 */
+        }
+
+        .card {
+            position: relative; 
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d; 
+            transition: transform 0.6s; 
+            cursor: pointer;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: transform 0.6s, left 0.5s ease-in-out, top 0.5s ease-in-out, z-index 0.3s; 
+        }
+
+        .card.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden; 
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            overflow: hidden; 
+        }
+
+        .card-front {
+            background-color: #fff; 
+            transform: rotateY(180deg); 
+        }
+
+        .card-front img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; 
+            border-radius: 8px;
+        }
+
+        .card-back {
+            background-color: #87ceeb; 
+            border: 2px solid #4682b4;
+        }
+        .card-back::after {
+            content: '❤️'; 
+            font-size: 2em;
+        }
+
+        .card.shuffling {
+            position: absolute !important; 
+            z-index: 100; 
+            /* left, top, width, height는 JS에서 설정 */
+            will-change: left, top, transform; /* 애니메이션 성능 최적화 */
+        }
+
+        #start-screen, #game-over-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            z-index: 200;
+        }
+        #start-screen h2, #game-over-screen h2 {
+            margin-bottom: 20px;
+            font-size: 2em;
+        }
+        #start-screen button, #game-over-screen button {
+            padding: 12px 25px;
+            font-size: 1.3em;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        #start-screen button:hover, #game-over-screen button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div id="game-container">
+        <div id="game-info">
+            <span>스테이지: <span id="stage-display">1</span></span>
+            <span>시간: <span id="time-display">--</span></span>
+            <span>점수: <span id="score-display">0</span></span>
+        </div>
+        <div id="card-grid">
+            </div>
+    </div>
+
+    <div id="start-screen">
+        <h2>기억력 카드 게임</h2>
+        <p>사진 짝을 맞춰 기억력을 테스트해보세요!</p>
+        <button id="start-button">게임 시작</button>
+    </div>
+
+    <div id="game-over-screen" style="display: none;">
+        <h2>게임 오버!</h2>
+        <p>최종 점수: <span id="final-score">0</span></p>
+        <button id="restart-button">다시 시작</button>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const cardGrid = document.getElementById('card-grid');
+            const gameContainer = document.getElementById('game-container'); 
+            const stageDisplay = document.getElementById('stage-display');
+            const timeDisplay = document.getElementById('time-display');
+            const scoreDisplay = document.getElementById('score-display');
+            const startScreen = document.getElementById('start-screen');
+            const startButton = document.getElementById('start-button');
+            const gameOverScreen = document.getElementById('game-over-screen');
+            const restartButton = document.getElementById('restart-button');
+            const finalScoreDisplay = document.getElementById('final-score');
+
+            const NUM_PAIRS = 8; 
+            const GRID_SIZE = 4; 
+            const CARD_COUNT = NUM_PAIRS * 2; 
+
+            const imagePaths = [
+    'assets/img/game1.jpg', 
+    'assets/img/game2.jpg', 
+    'assets/img/game3.jpg', 
+    'assets/img/game4.jpg', 
+    'assets/img/game5.jpg', 
+    'assets/img/game6.jpg', 
+    'assets/img/game7.jpg', 
+    'assets/img/game8.jpg', 
+    'assets/img/game1.jpg', // 각 이미지는 두 번씩 추가해야 합니다.
+    'assets/img/game2.jpg', 
+    'assets/img/game3.jpg', 
+    'assets/img/game4.jpg', 
+    'assets/img/game5.jpg', 
+    'assets/img/game6.jpg', 
+    'assets/img/game7.jpg', 
+    'assets/img/game8.jpg', 
+            ];
+
+            let cards = []; 
+            let flippedCards = []; 
+            let matchedPairs = 0; 
+            let allowFlip = false; 
+
+            let gameStage = 1;
+            let gameScore = 0;
+            let timeLeft = 0;
+            let timerInterval;
+
+            let cardWidth = 0; 
+            let cardHeight = 0;
+            let gameContainerHeight = 0; 
+
+            // --- 게임 초기화 및 시작 ---
+            function initializeGame() {
+                clearInterval(timerInterval);
+                cardGrid.innerHTML = '';
+                cards = [];
+                flippedCards = [];
+                matchedPairs = 0;
+                gameStage = 1;
+                gameScore = 0;
+                allowFlip = false;
+                
+                updateUI();
+                createCards(); 
+                positionCardsInitially(); 
+
+                gameOverScreen.style.display = 'none';
+                startScreen.style.display = 'flex';
+            }
+
+            function startGame() {
+                startScreen.style.display = 'none';
+                resetStage();
+            }
+
+            function resetStage() {
+                clearInterval(timerInterval);
+                timeLeft = calculateTimeLimit(gameStage);
+                updateUI();
+                
+                cards.forEach(card => {
+                    card.element.classList.remove('flipped', 'matched');
+                    card.isFlipped = false;
+                    card.isMatched = false;
+                    card.element.style.pointerEvents = 'none'; 
+                });
+
+                setTimeout(() => {
+                    showAllCardsTemporarily(); 
+                }, 500); 
+            }
+
+            function calculateTimeLimit(stage) {
+                return Math.max(10, 35 - (stage - 1) * 5); 
+            }
+
+            function startTimer() {
+                clearInterval(timerInterval);
+                timerInterval = setInterval(() => {
+                    timeLeft--;
+                    timeDisplay.textContent = timeLeft;
+                    if (timeLeft <= 0) {
+                        clearInterval(timerInterval);
+                        endGame(false);
+                    }
+                }, 1000);
+            }
+
+            // --- 카드 생성 및 초기 배치 ---
+            function createCards() {
+                let cardValues = [];
+                for (let i = 0; i < NUM_PAIRS; i++) {
+                    cardValues.push(i, i);
+                }
+                shuffleArray(cardValues);
+
+                for (let i = 0; i < CARD_COUNT; i++) {
+                    const cardElement = document.createElement('div');
+                    cardElement.classList.add('card');
+
+                    const cardFront = document.createElement('div');
+                    cardFront.classList.add('card-face', 'card-front');
+                    const img = document.createElement('img');
+                    img.src = imagePaths[cardValues[i]]; 
+                    img.alt = `Card ${cardValues[i]}`;
+                    cardFront.appendChild(img);
+
+                    const cardBack = document.createElement('div');
+                    cardBack.classList.add('card-face', 'card-back');
+
+                    cardElement.appendChild(cardFront);
+                    cardElement.appendChild(cardBack);
+
+                    cardElement.addEventListener('click', () => handleCardClick(cardElement, cardValues[i]));
+                    cardGrid.appendChild(cardElement);
+
+                    cards.push({
+                        element: cardElement,
+                        value: cardValues[i],
+                        isFlipped: false,
+                        isMatched: false,
+                        initialGridIndex: i, 
+                        currentX: 0, 
+                        currentY: 0  
+                    });
+                }
+            }
+
+            // 카드가 그리드에 배치된 후, 각 카드의 정확한 픽셀 위치와 크기를 저장
+            // 이 함수는 DOM 변화가 일어날 때마다 호출되어 정확한 위치를 갱신해야 합니다.
+            function positionCardsInitially() {
+                cards.sort((a, b) => a.initialGridIndex - b.initialGridIndex);
+                cardGrid.innerHTML = ''; 
+                cards.forEach(card => {
+                    card.element.style.transform = ''; 
+                    card.element.classList.remove('shuffling');
+                    card.element.style.left = '';
+                    card.element.style.top = '';
+                    card.element.style.width = ''; 
+                    card.element.style.height = ''; 
+                    card.element.style.position = ''; 
+                    card.element.style.zIndex = '';
+                    cardGrid.appendChild(card.element);
+                });
+
+                requestAnimationFrame(() => { 
+                    requestAnimationFrame(() => { 
+                        // DOM이 완전히 렌더링된 후 정확한 크기와 위치를 측정합니다.
+                        const firstCardRect = cards[0].element.getBoundingClientRect();
+                        cardWidth = firstCardRect.width;
+                        cardHeight = firstCardRect.height;
+
+                        // gameContainer의 실제 너비를 기준으로 cardGrid의 max-width를 조정하여 카드 크기 확보
+                        const calculatedGameContainerWidth = gameContainer.offsetWidth;
+                        // cardGrid.style.maxWidth = `${calculatedGameContainerWidth * 0.9}px`; // gameContainer의 90%
+                        // cardGrid.style.width = `${calculatedGameContainerWidth * 0.9}px`; // gameContainer의 90%
+
+
+                        gameContainerHeight = gameContainer.offsetHeight; 
+
+                        // CSS 변수로 카드 크기 및 게임 컨테이너 높이 저장
+                        document.documentElement.style.setProperty('--card-width', `${cardWidth}px`);
+                        document.documentElement.style.setProperty('--card-height', `${cardHeight}px`);
+                        document.documentElement.style.setProperty('--game-container-height', `${gameContainerHeight}px`);
+
+                        // gameContainer의 위치는 CSS transform으로 처리하므로, 여기서는 카드의 상대 위치만 중요
+                        const gameContainerRect = gameContainer.getBoundingClientRect();
+
+                        cards.forEach(card => {
+                            const rect = card.element.getBoundingClientRect();
+                            // 카드의 위치를 gameContainer의 좌상단 기준으로 계산
+                            card.currentX = rect.left - gameContainerRect.left;
+                            card.currentY = rect.top - gameContainerRect.top;
+                        });
+
+                        console.log("Card dimensions:", cardWidth, cardHeight);
+                        console.log("Game Container Height:", gameContainerHeight);
+                        console.log("Card positions updated:", cards.map(c => ({ id: c.initialGridIndex, x: c.currentX, y: c.currentY })));
+                    });
+                });
+            }
+
+            // 배열 섞기 함수 (Fisher-Yates shuffle)
+            function shuffleArray(array) {
+                for (let i = array.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [array[i], array[j]] = [array[j], array[i]];
+                }
+            }
+
+            // --- 게임 로직 ---
+            function showAllCardsTemporarily() {
+                cards.forEach(card => {
+                    if (!card.isMatched) { 
+                        card.element.classList.add('flipped');
+                        card.isFlipped = true;
+                    }
+                });
+
+                const revealTime = 3000; 
+                setTimeout(() => {
+                    // cardGrid의 display를 변경하여 absolute 위치 조정
+                    cardGrid.style.display = 'block'; 
+
+                    cards.forEach(card => {
+                        if (!card.isMatched) {
+                            card.element.classList.add('shuffling'); 
+                            // game-container를 기준으로 left, top 설정
+                            card.element.style.left = `${card.currentX}px`;
+                            card.element.style.top = `${card.currentY}px`;
+                            card.element.style.width = `${cardWidth}px`;
+                            card.element.style.height = `${cardHeight}px`;
+                            card.element.style.transform = 'none'; /* 셔플 시 transform 초기화 */
+                        }
+                    });
+
+                    startShuffleAnimation(gameStage, () => {
+                        cardGrid.style.display = 'grid'; 
+
+                        cards.forEach(card => {
+                            if (!card.isMatched) {
+                                card.element.classList.remove('flipped', 'shuffling'); 
+                                card.isFlipped = false;
+                                card.element.style.width = ''; 
+                                card.element.style.height = ''; 
+                            }
+                        });
+                        // 셔플 후 카드 재배치 및 위치 업데이트
+                        positionCardsInitially(); 
+
+                        setTimeout(() => {
+                            cards.forEach(card => {
+                                if (!card.isMatched) {
+                                    card.element.style.pointerEvents = 'auto'; 
+                                }
+                            });
+                            allowFlip = true; 
+                            startTimer(); 
+                        }, 600); 
+                    });
+                }, revealTime);
+            }
+
+            // --- 셔플 애니메이션 (두 카드 위치 교환) ---
+            async function startShuffleAnimation(stage, callback) {
+                const shuffleCount = 3 + (stage - 1) * 2; 
+                const shuffleDuration = 1000; 
+
+                for (let i = 0; i < shuffleCount; i++) {
+                    const availableCards = cards.filter(card => !card.isMatched);
+                    if (availableCards.length < 2) break; 
+
+                    const idx1 = Math.floor(Math.random() * availableCards.length);
+                    let idx2 = Math.floor(Math.random() * availableCards.length);
+                    while (idx1 === idx2) {
+                        idx2 = Math.floor(Math.random() * availableCards.length);
+                    }
+
+                    const card1 = availableCards[idx1];
+                    const card2 = availableCards[idx2];
+
+                    console.log(`셔플 ${i+1}/${shuffleCount}: 카드 ${card1.initialGridIndex} (x:${card1.currentX}, y:${card1.currentY})와 카드 ${card2.initialGridIndex} (x:${card2.currentX}, y:${card2.currentY}) 교환`);
+                    await performTwoCardShuffleAnimation(card1, card2, shuffleDuration);
+                }
+                callback();
+            }
+
+            // 두 카드 위치 교환 애니메이션
+            function performTwoCardShuffleAnimation(cardA, cardB, duration) {
+                return new Promise(resolve => {
+                    const xA = cardA.currentX;
+                    const yA = cardA.currentY;
+                    const xB = cardB.currentX;
+                    const yB = cardB.currentY;
+
+                    cardA.element.style.left = `${xB}px`;
+                    cardA.element.style.top = `${yB}px`;
+                    cardB.element.style.left = `${xA}px`;
+                    cardB.element.style.top = `${yA}px`;
+
+                    cardA.element.classList.add('shuffling');
+                    cardB.element.classList.add('shuffling');
+
+                    setTimeout(() => {
+                        // 카드 객체 배열의 순서를 실제로 교환
+                        const indexInCardsA = cards.indexOf(cardA);
+                        const indexInCardsB = cards.indexOf(cardB);
+                        [cards[indexInCardsA], cards[indexInCardsB]] = [cards[indexInCardsB], cards[indexInCardsA]];
+                        
+                        // 현재 위치를 업데이트 (다음 셔플을 위해)
+                        [cardA.currentX, cardB.currentX] = [xB, xA];
+                        [cardA.currentY, cardB.currentY] = [yB, yA];
+
+                        resolve(); 
+                    }, duration);
+                });
+            }
+
+            // 카드 뒤집기
+            function handleCardClick(cardElement, value) {
+                if (!allowFlip || flippedCards.length >= 2 || cardElement.classList.contains('flipped') || cardElement.classList.contains('matched')) {
+                    return; 
+                }
+
+                const card = cards.find(c => c.element === cardElement);
+                if (!card) return; 
+
+                card.element.classList.add('flipped');
+                card.isFlipped = true;
+                flippedCards.push(card);
+
+                if (flippedCards.length === 2) {
+                    allowFlip = false; 
+                    checkMatch();
+                }
+            }
+
+            // 짝 맞추기 확인
+            function checkMatch() {
+                const [card1, card2] = flippedCards;
+
+                if (card1.value === card2.value) {
+                    gameScore += 100;
+                    card1.element.classList.add('matched');
+                    card2.element.classList.add('matched');
+                    card1.isMatched = true;
+                    card2.isMatched = true;
+                    matchedPairs++;
+                    updateUI();
+
+                    setTimeout(() => {
+                        flippedCards = [];
+                        allowFlip = true;
+                        if (matchedPairs === NUM_PAIRS) {
+                            setTimeout(() => {
+                                nextStage();
+                            }, 500); 
+                        }
+                    }, 800); 
+                } else {
+                    gameScore = Math.max(0, gameScore - 50);
+                    updateUI();
+                    setTimeout(() => {
+                        card1.element.classList.remove('flipped');
+                        card2.element.classList.remove('flipped');
+                        card1.isFlipped = false;
+                        card2.isFlipped = false;
+                        flippedCards = [];
+                        allowFlip = true;
+                    }, 1000); 
+                }
+            }
+
+            function nextStage() {
+                clearInterval(timerInterval);
+                gameStage++;
+                matchedPairs = 0;
+                resetStage();
+            }
+
+            function endGame(isWin) {
+                clearInterval(timerInterval);
+                allowFlip = false;
+                finalScoreDisplay.textContent = gameScore;
+                gameOverScreen.style.display = 'flex';
+            }
+
+            function updateUI() {
+                stageDisplay.textContent = gameStage;
+                timeDisplay.textContent = timeLeft;
+                scoreDisplay.textContent = gameScore;
+            }
+
+            // --- 이벤트 리스너 ---
+            startButton.addEventListener('click', startGame);
+            restartButton.addEventListener('click', initializeGame);
+
+            document.addEventListener('gesturestart', function (e) { e.preventDefault(); });
+            document.addEventListener('touchstart', function (event) {
+                if (event.touches.length > 1) { event.preventDefault(); }
+            }, { passive: false });
+            document.addEventListener('touchmove', function (event) {
+                if (event.touches.length > 1) { event.preventDefault(); }
+            }, { passive: false });
+            document.addEventListener('touchend', function (event) {
+                if (event.touches.length > 1) { event.preventDefault(); }
+            });
+
+            // 윈도우 크기 변경 시 game-container 위치 재조정 (모바일 가로/세로 전환 대비)
+            window.addEventListener('resize', positionCardsInitially);
+
+            // 초기 게임 시작
+            initializeGame();
+        }); // DOMContentLoaded 끝
+    </script>
+</body>
+</html>

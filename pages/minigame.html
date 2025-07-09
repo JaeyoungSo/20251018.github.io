@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>기억력 카드 게임</title>
     <style>
-        /* CSS 부분은 변경 없음. 이전 응답의 CSS를 그대로 사용합니다. */
         body {
             margin: 0;
             overflow: hidden; /* 스크롤 방지 */
@@ -25,8 +24,8 @@
         }
 
         #game-container {
-            position: relative; /* 뷰포트 기준 absolute 대신 상대 위치로 변경 */
-            margin-top: 20px; /* 상단에서 약간 여백을 줘서 붙도록 합니다. 필요에 따라 조절하세요. */
+            position: relative; /* 자식 absolute 기준 */
+            margin-top: 20px; /* 상단 여백 */
             
             width: min(90vw, 600px); 
             padding: 10px;
@@ -61,20 +60,21 @@
             grid-template-columns: repeat(4, 1fr); 
             grid-template-rows: repeat(4, 1fr); 
             gap: 10px; 
-            width: min(85vw, 550px); 
+            width: min(85vw, 550px); /* 뷰포트 너비의 85% 또는 550px 중 작은 값 */
             aspect-ratio: 1 / 1; /* 가로세로 비율 1:1 유지 */
             flex-grow: 1; /* 남은 공간을 차지하도록 */
         }
 
         .card {
-            position: relative; 
+            position: relative; /* 3D 변환을 위해 */
             width: 100%;
             height: 100%;
             transform-style: preserve-3d; 
-            transition: transform 0.6s; 
+            transition: transform 0.6s; /* 플립 애니메이션 */
             cursor: pointer;
             border-radius: 8px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            /* 셔플 애니메이션을 위해 left, top, z-index도 transition에 추가 */
             transition: transform 0.6s, left 0.5s ease-in-out, top 0.5s ease-in-out, z-index 0.3s; 
         }
 
@@ -118,14 +118,17 @@
             font-size: 2em; /* 카드 크기에 맞춰 자연스럽게 */
         }
 
+        /* 셔플 애니메이션 중 카드 스타일 */
         .card.shuffling {
             position: absolute !important; 
             z-index: 100; 
             will-change: left, top, transform; /* 애니메이션 성능 최적화 */
+            /* width, height는 JS에서 설정되므로 CSS에서 고정값을 주지 않습니다 */
         }
 
+        /* 시작/게임오버 화면 */
         #start-screen, #game-over-screen {
-            position: absolute;
+            position: absolute; /* game-container 내에서 절대 위치 */
             top: 0;
             left: 0;
             width: 100%;
@@ -137,7 +140,7 @@
             justify-content: center;
             align-items: center;
             text-align: center;
-            z-index: 200;
+            z-index: 200; /* 게임 컨테이너 위의 최상위 */
         }
         #start-screen h2, #game-over-screen h2 {
             margin-bottom: 20px;
@@ -155,26 +158,6 @@
         }
         #start-screen button:hover, #game-over-screen button:hover {
             background-color: #45a049;
-        }
-
-        /* 랭크보드 테이블 CSS 추가 */
-        #leaderboard-display table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 10px;
-        }
-        #leaderboard-display th, #leaderboard-display td {
-            border: 1px solid #eee;
-            padding: 8px;
-            text-align: center;
-        }
-        #leaderboard-display th {
-            background-color: #f2f2f2;
-            font-weight: bold;
-            color: #333; /* 텍스트 색상 추가 */
-        }
-        #leaderboard-display tr:nth-child(even) {
-            background-color: #f9f9f9;
         }
     </style>
 </head>
@@ -199,22 +182,6 @@
         <h2>게임 오버!</h2>
         <p>최종 점수: <span id="final-score">0</span></p>
         <button id="restart-button">다시 시작</button>
-        
-        <hr style="width: 80%; margin: 20px auto;">
-        <h3>랭크보드</h3>
-        <div id="leaderboard-display" style="
-            background-color: #fff; 
-            padding: 10px; 
-            border-radius: 5px; 
-            max-height: 200px; 
-            overflow-y: auto; 
-            width: 80%;
-            margin: 0 auto;
-            color: #333;
-            font-size: 0.9em;
-        ">
-            <p>랭크보드를 불러오는 중...</p>
-        </div>
     </div>
 
     <script>
@@ -229,16 +196,12 @@
             const gameOverScreen = document.getElementById('game-over-screen');
             const restartButton = document.getElementById('restart-button');
             const finalScoreDisplay = document.getElementById('final-score');
-            const leaderboardDisplay = document.getElementById('leaderboard-display'); // 랭크보드 요소 추가
 
             const NUM_PAIRS = 8; 
-            const GRID_SIZE = 4; 
             const CARD_COUNT = NUM_PAIRS * 2; 
 
-            // Apps Script 웹 앱 URL (랭크보드 API 엔드포인트)
-            const LEADERBOARD_API_URL = '여기에_배포한_Apps_Script_웹_앱_URL을_붙여넣으세요';
-
-            let imagePaths = [
+            // 이미지 경로 배열을 짝수개로 바로 구성합니다.
+            const baseImagePaths = [
                 '../assets/img/game1.jpg', 
                 '../assets/img/game2.jpg', 
                 '../assets/img/game3.jpg', 
@@ -248,8 +211,8 @@
                 '../assets/img/game7.jpg', 
                 '../assets/img/game8.jpg', 
             ];
-            // 이미지 경로 배열을 짝수개로 만듦 (각 이미지를 두 번씩)
-            imagePaths = [...imagePaths, ...imagePaths];
+            // 각 이미지를 두 번씩 사용하여 총 16개의 카드 경로를 만듭니다.
+            let imagePaths = [...baseImagePaths, ...baseImagePaths];
 
             let cards = []; 
             let flippedCards = []; 
@@ -263,7 +226,7 @@
 
             let cardWidth = 0; 
             let cardHeight = 0;
-            let gameContainerHeight = 0; 
+            let gameContainerInitialHeight = 0; // 게임 컨테이너의 초기 높이 (CSS 변수에 사용)
 
             // --- 게임 초기화 및 시작 ---
             function initializeGame() {
@@ -277,13 +240,11 @@
                 allowFlip = false;
                 
                 updateUI();
-                createCards(); // 새롭게 카드 생성
-                positionCardsInitially(); // 초기 배치 위치 및 크기 계산
+                createCards(); // 새롭게 카드 생성 (이벤트 리스너 포함)
+                positionCardsInitially(); // 생성된 카드의 초기 그리드 위치 저장
 
                 gameOverScreen.style.display = 'none';
                 startScreen.style.display = 'flex';
-                // 게임 시작 화면에 랭크보드 표시 (선택 사항)
-                // displayLeaderboard(); 
             }
 
             function startGame() {
@@ -297,11 +258,15 @@
                 updateUI();
                 
                 // 카드 상태 초기화 (뒤집힌 상태, 매칭 상태 제거)
+                // 중요한 부분: `cards` 배열 자체를 섞습니다.
+                // 이 `cards` 배열의 순서가 DOM 재배치에 반영됩니다.
+                shuffleArray(cards); 
+
                 cards.forEach(card => {
                     card.element.classList.remove('flipped', 'matched');
                     card.isFlipped = false;
                     card.isMatched = false;
-                    card.element.style.pointerEvents = 'none'; 
+                    card.element.style.pointerEvents = 'none'; // 셔플 중 클릭 방지
                 });
 
                 // 카드를 섞기 위해 잠시 뒤집어서 보여줌
@@ -330,9 +295,9 @@
             function createCards() {
                 let cardValues = [];
                 for (let i = 0; i < NUM_PAIRS; i++) {
-                    cardValues.push(i, i);
+                    cardValues.push(i, i); // 0,0,1,1,2,2... 형태로 값 생성
                 }
-                shuffleArray(cardValues); // 카드 값 자체를 섞음
+                shuffleArray(cardValues); // 카드 값 자체를 섞음 (어떤 이미지 짝이 어디에 갈지)
 
                 cardGrid.innerHTML = ''; // 카드 그리드 비우기 (새로운 카드를 위해)
                 cards = []; // 기존 카드 배열 완전히 비우기
@@ -354,8 +319,9 @@
                     cardElement.appendChild(cardFront);
                     cardElement.appendChild(cardBack);
 
-                    // 클릭 이벤트 리스너는 카드 생성 시점에 추가
-                    cardElement.addEventListener('click', () => handleCardClick(cardElement, cardValues[i]));
+                    // 클릭 이벤트 리스너는 카드 생성 시점에 추가하고 유지
+                    // `this` 바인딩을 통해 `handleCardClick` 내부에서 클릭된 엘리먼트를 정확히 참조
+                    cardElement.addEventListener('click', handleCardClick); 
                     
                     cardGrid.appendChild(cardElement);
 
@@ -364,7 +330,7 @@
                         value: cardValues[i],
                         isFlipped: false,
                         isMatched: false,
-                        initialGridIndex: i, // 초기 생성 시 그리드 인덱스
+                        // currentX, currentY는 positionCardsInitially에서 갱신됨
                         currentX: 0, 
                         currentY: 0  
                     });
@@ -372,46 +338,34 @@
             }
 
             // 카드가 그리드에 배치된 후, 각 카드의 정확한 픽셀 위치와 크기를 저장
-            // 이 함수는 DOM 변화가 일어날 때마다 호출되어 정확한 위치를 갱신해야 합니다.
             function positionCardsInitially() {
-                // DOM에 카드가 올바른 그리드 순서로 있는지 확인 (선택 사항, createCards에서 이미 처리)
-                // cards.sort((a, b) => a.initialGridIndex - b.initialGridIndex); 
-                // cardGrid.innerHTML = ''; 
-                // cards.forEach(card => {
-                //     card.element.style.transform = ''; 
-                //     card.element.classList.remove('shuffling');
-                //     card.element.style.left = '';
-                //     card.element.style.top = '';
-                //     card.element.style.width = ''; 
-                //     card.element.style.height = ''; 
-                //     card.element.style.position = ''; 
-                //     card.element.style.zIndex = '';
-                //     cardGrid.appendChild(card.element);
-                // });
-
+                // DOM이 완전히 렌더링된 후 측정하기 위해 requestAnimationFrame 두 번 사용
                 requestAnimationFrame(() => { 
-                    requestAnimationFrame(() => { 
-                        const firstCardRect = cards[0].element.getBoundingClientRect();
-                        cardWidth = firstCardRect.width;
-                        cardHeight = firstCardRect.height;
-
-                        gameContainerHeight = gameContainer.offsetHeight; 
-
-                        document.documentElement.style.setProperty('--card-width', `${cardWidth}px`);
-                        document.documentElement.style.setProperty('--card-height', `${cardHeight}px`);
-                        document.documentElement.style.setProperty('--game-container-height', `${gameContainerHeight}px`);
-
+                    requestAnimationFrame(() => {
                         const gameContainerRect = gameContainer.getBoundingClientRect();
 
+                        // 첫 번째 카드의 크기를 기준으로 카드 크기 설정
+                        if (cards.length > 0) {
+                            const firstCardRect = cards[0].element.getBoundingClientRect();
+                            cardWidth = firstCardRect.width;
+                            cardHeight = firstCardRect.height;
+                            document.documentElement.style.setProperty('--card-width', `${cardWidth}px`);
+                            document.documentElement.style.setProperty('--card-height', `${cardHeight}px`);
+                        }
+                        
+                        // gameContainer의 초기 높이를 설정하여 레이아웃 흔들림 방지
+                        if (gameContainerInitialHeight === 0) {
+                            gameContainerInitialHeight = gameContainer.offsetHeight; 
+                            document.documentElement.style.setProperty('--game-container-height', `${gameContainerInitialHeight}px`);
+                        }
+
+                        // 각 카드 엘리먼트의 현재 그리드 위치를 정확히 가져와 card.currentX/Y에 저장
                         cards.forEach(card => {
                             const rect = card.element.getBoundingClientRect();
                             card.currentX = rect.left - gameContainerRect.left;
                             card.currentY = rect.top - gameContainerRect.top;
+                            // console.log(`Card value: ${card.value}, Grid Pos: (${card.currentX}, ${card.currentY})`);
                         });
-
-                        console.log("Card dimensions:", cardWidth, cardHeight);
-                        console.log("Game Container Height:", gameContainerHeight);
-                        console.log("Card positions updated:", cards.map(c => ({ id: c.value, x: c.currentX, y: c.currentY })));
                     });
                 });
             }
@@ -426,118 +380,116 @@
 
             // --- 게임 로직 ---
             function showAllCardsTemporarily() {
+                // 셔플 애니메이션 시작 전: 모든 카드를 뒤집고, absolute 포지션으로 변경
                 cards.forEach(card => {
                     if (!card.isMatched) { 
                         card.element.classList.add('flipped');
                         card.isFlipped = true;
+                        
+                        // 셔플 애니메이션을 위해 absolute 포지션 및 현재 위치 설정
+                        card.element.classList.add('shuffling'); 
+                        card.element.style.left = `${card.currentX}px`;
+                        card.element.style.top = `${card.currentY}px`;
+                        card.element.style.width = `${cardWidth}px`; // 명시적 width/height 설정
+                        card.element.style.height = `${cardHeight}px`;
+                        card.element.style.transform = 'none'; // rotateY 초기화 (시각적으로 정면)
                     }
                 });
 
-                const revealTime = 3000; 
+                const revealTime = 2000; // 카드를 잠시 보여주는 시간 (조절 가능)
                 setTimeout(() => {
-                    // 셔플 애니메이션을 위해 카드들을 absolute 포지션으로 변경
-                    cardGrid.style.display = 'block'; // 그리드 레이아웃 대신 블록으로 전환
-
-                    cards.forEach(card => {
-                        if (!card.isMatched) {
-                            card.element.classList.add('shuffling'); 
-                            card.element.style.left = `${card.currentX}px`;
-                            card.element.style.top = `${card.currentY}px`;
-                            card.element.style.width = `${cardWidth}px`;
-                            card.element.style.height = `${cardHeight}px`;
-                            card.element.style.transform = 'none'; 
-                        }
-                    });
-
-                    startShuffleAnimation(gameStage, () => {
-                        // 셔플 애니메이션이 끝나면 DOM에서 카드들을 실제 순서에 맞게 재배치
-                        cardGrid.innerHTML = ''; // 기존 카드 DOM 모두 제거
-                        // cards 배열은 이미 셔플 로직에서 순서가 바뀌어 있음
-                        cards.forEach(card => {
-                            card.element.classList.remove('flipped', 'shuffling'); 
-                            card.isFlipped = false;
-                            card.element.style.width = ''; 
-                            card.element.style.height = ''; 
-                            card.element.style.left = ''; // left, top 스타일 제거하여 그리드 레이아웃 적용
-                            card.element.style.top = ''; 
-                            cardGrid.appendChild(card.element); // DOM에 새로운 순서로 추가
-                        });
-                        cardGrid.style.display = 'grid'; // 그리드 레이아웃 복원
-                        
-                        // 재배치 후 새로운 위치 값 다시 계산 및 저장
-                        positionCardsInitially(); 
-
-                        setTimeout(() => {
-                            cards.forEach(card => {
-                                if (!card.isMatched) {
-                                    card.element.style.pointerEvents = 'auto'; 
-                                }
-                            });
-                            allowFlip = true; 
-                            startTimer(); 
-                        }, 600); 
-                    });
+                    // 이제 셔플 애니메이션 시작
+                    startShuffleAnimation(gameStage, shuffleCallback);
                 }, revealTime);
             }
 
+            // 셔플 애니메이션 완료 후 호출될 콜백 함수
+            function shuffleCallback() {
+                // DOM에서 카드들을 실제 순서(cards 배열)에 맞게 재배치
+                // 이전에 'shuffling' 클래스 때문에 absolute였던 카드들을 다시 그리드 레이아웃으로 돌림
+                cardGrid.innerHTML = ''; // 기존 카드 DOM 모두 제거
+                cards.forEach(card => {
+                    card.element.classList.remove('flipped', 'shuffling'); // flipped, shuffling 클래스 제거
+                    card.isFlipped = false; // 논리적 상태 초기화
+                    card.element.style.width = ''; 
+                    card.element.style.height = ''; 
+                    card.element.style.left = ''; // left, top 스타일 제거하여 그리드 레이아웃 적용
+                    card.element.style.top = ''; 
+                    card.element.style.transform = ''; // 혹시 모를 transform 잔여값 제거
+                    card.element.style.zIndex = ''; // z-index도 기본으로 돌림
+
+                    // 중요한 부분: 'cards' 배열에 저장된 순서대로 DOM에 다시 추가
+                    // 이 부분이 실제 카드 위치를 섞는 핵심!
+                    cardGrid.appendChild(card.element); 
+                });
+                
+                // DOM에 재추가된 카드의 최종 그리드 위치를 다시 계산
+                positionCardsInitially(); 
+
+                // 카드 클릭 허용 및 타이머 시작
+                setTimeout(() => {
+                    cards.forEach(card => {
+                        if (!card.isMatched) {
+                            card.element.style.pointerEvents = 'auto'; // 클릭 허용
+                        }
+                    });
+                    allowFlip = true; // 플립 허용
+                    startTimer(); 
+                }, 600); // DOM 재배치 및 리플로우 시간 확보
+            }
+
+
             // --- 셔플 애니메이션 (두 카드 위치 교환) ---
             async function startShuffleAnimation(stage, callback) {
-                const shuffleCount = 3 + (stage - 1) * 2; 
-                const shuffleDuration = 500; // 애니메이션 시간 단축
+                const shuffleCount = 3 + (stage - 1) * 2; // 스테이지가 높아질수록 더 많이 섞음
+                const shuffleDuration = 500; // 각 셔플 애니메이션 시간 (ms)
 
                 for (let i = 0; i < shuffleCount; i++) {
                     const availableCards = cards.filter(card => !card.isMatched);
-                    if (availableCards.length < 2) break; 
+                    if (availableCards.length < 2) break; // 섞을 카드가 2개 미만이면 중단
 
                     const idx1 = Math.floor(Math.random() * availableCards.length);
                     let idx2 = Math.floor(Math.random() * availableCards.length);
-                    while (idx1 === idx2) {
+                    while (idx1 === idx2) { // 서로 다른 카드 선택
                         idx2 = Math.floor(Math.random() * availableCards.length);
                     }
 
                     const card1 = availableCards[idx1];
                     const card2 = availableCards[idx2];
 
-                    // 시각적으로 위치 교환 애니메이션 실행
                     await performTwoCardShuffleAnimation(card1, card2, shuffleDuration);
-                    
-                    // console.log(`셔플 ${i+1}/${shuffleCount}: 카드 ${card1.value}와 카드 ${card2.value} 교환`);
                 }
-                callback();
+                callback(); // 모든 셔플 애니메이션 완료 후 콜백 호출
             }
 
             // 두 카드 위치 교환 애니메이션
             function performTwoCardShuffleAnimation(cardA, cardB, duration) {
                 return new Promise(resolve => {
+                    // 현재 위치 (셔플 시작 전 위치)
                     const xA = cardA.currentX;
                     const yA = cardA.currentY;
                     const xB = cardB.currentX;
                     const yB = cardB.currentY;
 
-                    // 시각적으로 위치 변경
+                    // 시각적으로 위치 변경을 위한 CSS 속성 설정
+                    // .card에 transition이 정의되어 있으므로, left/top만 변경해도 애니메이션이 됨
                     cardA.element.style.left = `${xB}px`;
                     cardA.element.style.top = `${yB}px`;
                     cardB.element.style.left = `${xA}px`;
                     cardB.element.style.top = `${yA}px`;
 
-                    cardA.element.classList.add('shuffling');
-                    cardB.element.classList.add('shuffling');
-
+                    // 애니메이션 완료 대기
                     setTimeout(() => {
-                        // 중요: 애니메이션이 끝난 후, 카드 객체의 실제 위치와 순서를 업데이트합니다.
-                        // cardA와 cardB 객체 자체의 currentX, currentY를 교환
+                        // 중요: 애니메이션이 끝난 후, 카드 객체의 실제 위치(currentX/Y)를 업데이트
+                        // 이는 다음 셔플 단계에서 정확한 시작 위치를 보장합니다.
                         [cardA.currentX, cardB.currentX] = [xB, xA];
                         [cardA.currentY, cardB.currentY] = [yB, yA];
 
-                        // 중요: cards 배열 내에서 cardA와 cardB의 위치를 실제로 교환
-                        // 이는 다음 셔플이나 DOM 재구성에 영향을 미칩니다.
+                        // 중요: `cards` 배열 내에서 `cardA`와 `cardB`의 객체 순서를 실제로 교환
+                        // 이 배열 순서가 `shuffleCallback`에서 DOM에 반영됩니다.
                         const indexA = cards.indexOf(cardA);
                         const indexB = cards.indexOf(cardB);
                         [cards[indexA], cards[indexB]] = [cards[indexB], cards[indexA]];
-
-                        // 셔플 클래스 제거 (다음 셔플을 위해)
-                        cardA.element.classList.remove('shuffling');
-                        cardB.element.classList.remove('shuffling');
 
                         resolve(); 
                     }, duration);
@@ -545,20 +497,20 @@
             }
 
             // 카드 뒤집기
-            function handleCardClick(cardElement, value) {
-                if (!allowFlip || flippedCards.length >= 2 || cardElement.classList.contains('flipped') || cardElement.classList.contains('matched')) {
+            function handleCardClick() {
+                const cardElement = this; // 클릭된 카드 엘리먼트 (이벤트 리스너를 `this`로 바인딩했기 때문)
+                const card = cards.find(c => c.element === cardElement); // 해당 카드 객체 찾기
+
+                if (!card || !allowFlip || flippedCards.length >= 2 || card.isFlipped || card.isMatched) {
                     return; 
                 }
-
-                const card = cards.find(c => c.element === cardElement);
-                if (!card) return; 
 
                 card.element.classList.add('flipped');
                 card.isFlipped = true;
                 flippedCards.push(card);
 
                 if (flippedCards.length === 2) {
-                    allowFlip = false; 
+                    allowFlip = false; // 두 장 뒤집혔으니 추가 뒤집기 방지
                     checkMatch();
                 }
             }
@@ -578,11 +530,11 @@
 
                     setTimeout(() => {
                         flippedCards = [];
-                        allowFlip = true;
+                        allowFlip = true; // 매칭 성공했으니 다시 뒤집기 허용
                         if (matchedPairs === NUM_PAIRS) {
                             setTimeout(() => {
                                 nextStage();
-                            }, 500); 
+                            }, 500); // 다음 스테이지로 넘어가는 딜레이
                         }
                     }, 800); 
                 } else {
@@ -594,7 +546,7 @@
                         card1.isFlipped = false;
                         card2.isFlipped = false;
                         flippedCards = [];
-                        allowFlip = true;
+                        allowFlip = true; // 매칭 실패했으니 다시 뒤집기 허용
                     }, 1000); 
                 }
             }
@@ -611,13 +563,6 @@
                 allowFlip = false;
                 finalScoreDisplay.textContent = gameScore;
                 gameOverScreen.style.display = 'flex';
-
-                // --- 랭크보드 점수 전송 기능 추가 ---
-                const playerName = prompt("게임 오버! 당신의 이름을 입력하세요 (최대 10자):", "익명");
-                const trimmedName = playerName ? playerName.substring(0, 10) : "익명";
-
-                sendScoreToLeaderboard(trimmedName, gameScore, gameStage);
-                // --- 랭크보드 점수 전송 기능 추가 끝 ---
             }
 
             function updateUI() {
@@ -626,62 +571,11 @@
                 scoreDisplay.textContent = gameScore;
             }
 
-            // --- 랭크보드 관련 함수 (이전 응답에서 제공된 코드) ---
-            async function sendScoreToLeaderboard(name, score, stage) {
-                try {
-                    const response = await fetch(LEADERBOARD_API_URL, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'text/plain;charset=utf-8', 
-                        },
-                        body: JSON.stringify({ name: name, score: score, stage: stage })
-                    });
-                    const result = await response.json();
-                    if (result.status === 'success') {
-                        console.log('점수가 랭크보드에 성공적으로 기록되었습니다!');
-                        displayLeaderboard(); 
-                    } else {
-                        console.error('점수 기록 실패:', result.message);
-                    }
-                } catch (error) {
-                    console.error('랭크보드 API 호출 중 오류 발생:', error);
-                }
-            }
-
-            async function displayLeaderboard() {
-                leaderboardDisplay.innerHTML = '<p>랭크보드를 불러오는 중...</p>';
-                try {
-                    const response = await fetch(LEADERBOARD_API_URL);
-                    const data = await response.json();
-
-                    if (data && data.length > 0) {
-                        let html = '<table>';
-                        html += '<thead><tr><th>순위</th><th>이름</th><th>점수</th><th>스테이지</th></tr></thead>';
-                        html += '<tbody>';
-                        data.forEach((entry, index) => {
-                            html += `<tr>
-                                        <td>${index + 1}</td>
-                                        <td>${entry.name}</td>
-                                        <td>${entry.score}</td>
-                                        <td>${entry.stage}</td>
-                                     </tr>`;
-                        });
-                        html += '</tbody></table>';
-                        leaderboardDisplay.innerHTML = html;
-                    } else {
-                        leaderboardDisplay.innerHTML = '<p>아직 랭크 기록이 없습니다.</p>';
-                    }
-                } catch (error) {
-                    console.error('랭크보드 불러오기 실패:', error);
-                    leaderboardDisplay.innerHTML = '<p>랭크보드를 불러오는 데 실패했습니다.</p>';
-                }
-            }
-            // --- 랭크보드 관련 함수 끝 ---
-
             // --- 이벤트 리스너 ---
             startButton.addEventListener('click', startGame);
             restartButton.addEventListener('click', initializeGame);
 
+            // 멀티 터치 및 제스처 방지
             document.addEventListener('gesturestart', function (e) { e.preventDefault(); });
             document.addEventListener('touchstart', function (event) {
                 if (event.touches.length > 1) { event.preventDefault(); }
@@ -693,7 +587,12 @@
                 if (event.touches.length > 1) { event.preventDefault(); }
             });
 
-            window.addEventListener('resize', positionCardsInitially);
+            // 윈도우 크기 변경 시 카드 위치 재조정 (모바일 가로/세로 전환 대비)
+            // 게임 컨테이너의 높이도 다시 계산되도록 처리
+            window.addEventListener('resize', () => {
+                gameContainerInitialHeight = 0; // 높이 강제 재계산
+                positionCardsInitially();
+            });
 
             // 초기 게임 시작
             initializeGame();

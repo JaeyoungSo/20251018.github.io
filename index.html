@@ -617,19 +617,28 @@
                             
                             <div style="
                                 display: flex;
-                                justify-content: center;
-                                align-items: flex-start; /* 여기를 flex-start로 변경 */
-                                /* min-height: 100vh; 이 줄을 삭제하거나 min-height: auto; 로 변경 */
-                                min-height: auto; 
-                                margin: 0;
+                                justify-content: center; /* 가로 중앙 정렬 */
+                                align-items: flex-start; /* 세로 상단 정렬 */
+                                
+                                /* ***** 주요 변경사항 ***** */
+                                height: 550px; /* 또는 게임 컨테이너가 잘리지 않을 최소 높이로 설정 (예: 600px) */
+                                overflow: hidden; /* 이 div를 벗어나는 내용은 숨김 */
+                                /* *********************** */
+                            
+                                margin: 0 auto; /* 좌우 마진 auto로 가로 중앙 정렬 보조, 위아래 마진 0 */
                                 padding: 0;
+                                max-width: 620px; /* iframe max-width(600px) + border(2px*2) + padding(0)보다 약간 크게 설정 */
                             ">
                                 <iframe src="pages/minigame.html" 
                                         width="100%" 
-                                        height="350px" /* 게임판이 잘리지 않는 적절한 높이로 조절 */
+                                        height="100%" /* iframe 자체의 높이를 부모 div에 꽉 채우도록 100%로 설정 */
                                         frameborder="0" 
                                         scrolling="no"
-                                        style="max-width: 600px; border: 1px solid #ddd; border-radius: 10px;">
+                                        style="
+                                            max-width: 600px; /* iframe의 최대 너비는 유지 */
+                                            border: 1px solid #ddd; 
+                                            border-radius: 10px;
+                                        ">
                                 </iframe>
                             </div>
 

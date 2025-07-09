@@ -240,8 +240,8 @@
                     shuffleCount = 0; // 3단계는 섞지 않음
                 } else { // 4단계부터
                     numPairs = 8; // 16장 고정
-                    // 4단계부터 섞는 횟수를 1씩 늘려감 (3단계까지 섞는 횟수는 0이므로, 4단계부터 시작)
-                    shuffleCount = (stage - 3); // 4단계: 1회, 5단계: 2회 ...
+                    // 4단계부터 섞는 횟수를 1씩 늘려감 (4단계: 1회, 5단계: 2회 ... )
+                    shuffleCount = (stage - 3); 
                 }
                 return { numPairs, cardCount: numPairs * 2, shuffleCount };
             }
@@ -260,9 +260,9 @@
                 
                 updateUI();
                 
-                const { numPairs } = getStageConfig(gameStage); // 초기 numPairs 가져옴
+                const { numPairs } = getStageConfig(gameStage); 
                 createCards(numPairs); 
-                positionCardsInitially(); // 초기 카드 생성 후, 실제 그리드 위치를 한 번 저장
+                positionCardsInitially(); 
 
                 gameOverScreen.style.display = 'none';
                 startScreen.style.display = 'flex';
@@ -277,48 +277,44 @@
                 clearInterval(timerInterval);
                 
                 const { numPairs, shuffleCount } = getStageConfig(gameStage);
-                timeLeft = calculateTimeLimit(numPairs); // 시간 제한도 카드 개수에 따라 조정
+                timeLeft = calculateTimeLimit(numPairs); 
                 updateUI();
                 
-                // 기존 카드 제거
+                // 기존 카드 제거 및 새 카드 생성
                 cardGrid.innerHTML = ''; 
-                cards = []; // cards 배열도 초기화
-
-                // 새로운 스테이지에 맞는 카드 생성
+                cards = []; 
                 createCards(numPairs); 
-                positionCardsInitially(); // 새로운 카드 생성 후 그리드 위치 다시 측정
 
-                // 1. 카드를 잠시 뒤집어서 보여주기
-                const revealDelay = 500; // 카드 초기화 후 보여주기까지 짧은 딜레이
-                const revealTime = 10000; // 카드가 앞면으로 보여지는 총 시간 (10초)
-
-                // **수정된 부분: DOM이 완전히 반영되도록 더 확실하게 대기하고 강제 리플로우 유도**
+                // 카드가 DOM에 완전히 추가되고 렌더링되기를 기다림
                 requestAnimationFrame(() => { 
                     requestAnimationFrame(() => { 
-                        // DOM 업데이트가 적용된 후, 강제 리플로우 유도
-                        cards.forEach(card => card.element.offsetWidth); // 중요: 강제 리플로우 유도
+                        // 카드의 초기 위치를 다시 측정 및 저장
+                        positionCardsInitially(); 
 
-                        // 모든 카드를 앞면으로 뒤집기
+                        // 강제 리플로우: 카드가 뒷면 상태로 제대로 배치되었음을 브라우저에 알림
+                        cards.forEach(card => card.element.offsetWidth); 
+
+                        // 모든 카드를 앞면으로 뒤집기 (애니메이션 시작)
                         cards.forEach(card => {
                             if (!card.isMatched) { 
                                 card.element.classList.add('flipped'); 
                             }
                         });
 
-                        // 2. 카드를 10초 동안 보여준 후 실행될 로직
+                        const revealTime = 10000; // 카드가 앞면으로 보여지는 총 시간 (10초)
+
                         setTimeout(() => {
                             // 모든 카드를 뒷면으로 뒤집기 (애니메이션)
                             cards.forEach(card => {
                                 if (!card.isMatched) {
-                                    card.element.classList.remove('flipped'); // flipped 클래스 제거
+                                    card.element.classList.remove('flipped'); 
                                 }
                             });
                             
-                            // 카드가 뒷면으로 완전히 뒤집히는 애니메이션 시간을 기다립니다 (0.6초).
+                            // 카드가 뒷면으로 완전히 뒤집히는 애니메이션 시간을 기다림 (0.6초)
                             setTimeout(() => {
-                                // **셔플 동작 조건부 실행**
                                 if (shuffleCount > 0) { // 셔플 횟수가 0보다 클 때만 셔플 애니메이션 시작
-                                    // 셔플 애니메이션을 위해 absolute 포지션 및 현재 위치 설정
+                                    // 셔플을 위한 absolute 포지션 및 z-index 설정
                                     cards.forEach(card => {
                                         if (!card.isMatched) {
                                             card.element.classList.add('shuffling'); 
@@ -332,21 +328,18 @@
                                     // 셔플 애니메이션 시작
                                     startShuffleAnimation(shuffleCount, shuffleCallback); 
                                 } else { // 셔플하지 않는 단계 (1~3단계)
-                                    // 바로 카드 클릭 허용 및 타이머 시작
+                                    // 카드 클릭 허용 및 타이머 시작 (셔플 없이)
                                     enableCardInteractionAndStartTimer();
                                 }
-                            }, 600); // 0.6초: 카드가 뒷면으로 뒤집히는 시간
-
-                        }, revealTime); // 카드가 앞면으로 보여지는 총 시간 (10초)
-
+                            }, 600); // 카드가 뒷면으로 뒤집히는 애니메이션 시간
+                        }, revealTime); // 카드가 앞면으로 보여지는 총 시간
                     });
                 });
             }
 
             // 시간 제한 계산 (카드 개수에 비례하여 조정)
             function calculateTimeLimit(numPairs) {
-                // 2쌍(4장)일 때 15초, 4쌍(8장)일 때 30초, 8쌍(16장)일 때 60초 (예시)
-                // 필요에 따라 이 공식을 조정하세요.
+                // 필요에 따라 이 공식을 조정하세요. (예: 2쌍일 때 15초, 4쌍일 때 30초, 8쌍일 때 60초)
                 return Math.max(10, numPairs * 7.5); 
             }
 
@@ -369,19 +362,17 @@
                 for (let i = 0; i < currentNumPairs; i++) {
                     cardValues.push(i, i); 
                 }
-                shuffleArray(cardValues); // 어떤 이미지 짝이 어디에 갈지 결정
+                shuffleArray(cardValues); 
 
-                // cardGrid.innerHTML = ''; // resetStage에서 이미 처리
-                // cards = []; // resetStage에서 이미 처리
-
-                for (let i = 0; i < currentNumPairs * 2; i++) { // 현재 단계의 카드 개수만큼 생성
+                for (let i = 0; i < currentNumPairs * 2; i++) { 
                     const cardElement = document.createElement('div');
                     cardElement.classList.add('card');
+                    // 카드는 기본적으로 뒷면 상태로 시작 (flipped 클래스 없음)
 
                     const cardFront = document.createElement('div');
                     cardFront.classList.add('card-face', 'card-front');
                     const img = document.createElement('img');
-                    img.src = baseImagePaths[cardValues[i]]; // baseImagePaths에서 선택
+                    img.src = baseImagePaths[cardValues[i]]; 
                     img.alt = `Card ${cardValues[i]}`;
                     cardFront.appendChild(img);
 
@@ -447,21 +438,22 @@
 
             // 카드 클릭 허용 및 타이머 시작 공통 함수
             function enableCardInteractionAndStartTimer() {
-                // 셔플 관련 스타일 제거 (셔플하지 않는 경우에도 혹시 몰라 호출)
+                // 모든 카드에서 셔플링 관련 스타일 및 절대 위치 제거
                 cards.forEach(card => {
                     card.element.classList.remove('shuffling'); 
-                    card.element.style.width = ''; 
-                    card.element.style.height = ''; 
                     card.element.style.left = ''; 
                     card.element.style.top = ''; 
-                    card.element.style.transform = ''; 
+                    card.element.style.width = ''; 
+                    card.element.style.height = ''; 
                     card.element.style.zIndex = ''; 
+                    card.element.style.transform = ''; // flipped 클래스에 의해 관리되도록 transform 초기화
                 });
 
                 // DOM 재배치 후, 최종 그리드 위치를 다시 측정하여 currentX/Y 업데이트
-                // (셔플이 없어도 카드가 새로 생성되었으므로 필요)
+                // (셔플이 없어도 새로운 카드가 생성되므로 필요)
                 positionCardsInitially(); 
 
+                // 짧은 딜레이 후 카드 클릭 허용 및 타이머 시작
                 setTimeout(() => {
                     cards.forEach(card => {
                         if (!card.isMatched) {
@@ -470,7 +462,7 @@
                     });
                     allowFlip = true; 
                     startTimer(); 
-                }, 600); // DOM 리플로우 및 준비 시간 확보 (일관성을 위해 유지)
+                }, 300); // DOM 리플로우 및 준비 시간 확보를 위한 짧은 딜레이
             }
 
 
@@ -479,18 +471,10 @@
                 // DOM을 재구성하여 논리적으로 섞인 `cards` 배열 순서를 반영
                 cardGrid.innerHTML = ''; 
                 cards.forEach(card => {
-                    // 셔플 관련 스타일 제거 및 뒷면으로 돌리기
-                    card.element.classList.remove('shuffling', 'flipped'); // 셔플 스타일 제거
-                    card.isFlipped = false; // 논리적 상태도 뒷면으로
-                    card.element.style.width = ''; 
-                    card.element.style.height = ''; 
-                    card.element.style.left = ''; 
-                    card.element.style.top = ''; 
-                    card.element.style.transform = ''; // 중요: transform 초기화 (뒷면 보이도록)
-                    card.element.style.zIndex = ''; 
-
-                    // 섞인 순서대로 DOM에 다시 추가
-                    cardGrid.appendChild(card.element); 
+                    // 셔플 관련 스타일 제거 및 뒷면으로 돌리기 (이미 뒷면이지만 확실히)
+                    card.element.classList.remove('shuffling', 'flipped'); 
+                    card.isFlipped = false; 
+                    cardGrid.appendChild(card.element); // 섞인 순서대로 DOM에 다시 추가
                 });
                 
                 // 카드 클릭 허용 및 타이머 시작 (셔플 후)
@@ -585,13 +569,12 @@
                     matchedPairs++;
                     updateUI();
 
-                    // 현재 단계의 총 쌍 개수를 가져옴
                     const { numPairs } = getStageConfig(gameStage);
 
                     setTimeout(() => {
                         flippedCards = [];
                         allowFlip = true; 
-                        if (matchedPairs === numPairs) { // 현재 단계의 쌍 개수와 비교
+                        if (matchedPairs === numPairs) { 
                             setTimeout(() => {
                                 nextStage();
                             }, 500); 
@@ -649,13 +632,13 @@
 
             // 윈도우 크기 변경 시 카드 위치 재조정 (모바일 가로/세로 전환 대비)
             window.addEventListener('resize', () => {
-                gameContainerInitialHeight = 0; // 높이 강제 재계산
+                gameContainerInitialHeight = 0; 
                 positionCardsInitially();
             });
 
             // 초기 게임 시작
             initializeGame();
-        }); // DOMContentLoaded 끝
+        }); 
     </script>
 </body>
 </html>

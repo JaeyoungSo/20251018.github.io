@@ -609,9 +609,9 @@
                         if (matchedPairs === numPairs) { 
                             setTimeout(() => {
                                 nextStage();
-                            }, 200); // 짝이 맞았을 때 딜레이 0.2초로 변경
+                            }, 200); 
                         }
-                    }, 200); // 짝이 맞았을 때 딜레이 0.2초로 변경
+                    }, 200); // 짝이 맞았을 때 딜레이 0.2초 유지
                 } else {
                     gameScore = Math.max(0, gameScore - 50);
                     updateUI();
@@ -622,7 +622,7 @@
                         card2.isFlipped = false;
                         flippedCards = [];
                         allowFlip = true;
-                    }, 200); // 짝이 틀렸을 때 딜레이 0.2초로 변경
+                    }, 700); // 짝이 틀렸을 때 딜레이 0.7초로 변경
                 }
             }
 

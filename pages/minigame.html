@@ -10,8 +10,8 @@
             overflow: hidden; /* 스크롤 방지 */
             display: flex; 
             flex-direction: column; 
-            justify-content: center;
-            align-items: center;
+    	justify-content: flex-start; /* 이전: center - 이제 상단 정렬 */
+    	align-items: center; /* 이전: center - 가로 중앙 정렬은 유지 */
             min-height: 100vh;
             background-color: #f0f8ff; 
             font-family: 'Arial', sans-serif;
@@ -24,13 +24,14 @@
         }
 
         #game-container {
-            position: absolute; /* 뷰포트 기준으로 위치 고정 */
-            top: 50%; 
-            left: 50%;
-            transform: translate(-50%, -50%); /* 정확한 중앙 정렬 */
+            position: relative; /* 뷰포트 기준 absolute 대신 상대 위치로 변경 */
+            /* top: 50%; left: 50%; transform: translate(-50%, -50%); /* 이전 중앙 정렬 삭제 */ */
             
-            width: 90vw; /* 뷰포트 너비의 90%를 기본 너비로 사용 */
-            max-width: 600px; /* 최대 너비 제한 */
+            /* game-container 자체는 flex 아이템이므로, body의 align-items: center; 에 의해 수평 중앙 정렬됨 */
+            /* 상단에 붙도록 추가적인 margin-top 또는 align-self 설정 가능 */
+            margin-top: 20px; /* 상단에서 약간 여백을 줘서 붙도록 합니다. 필요에 따라 조절하세요. */
+            
+            width: min(90vw, 600px); 
             padding: 10px;
             background-color: #e6f7ff;
             border: 2px solid #aaddff;

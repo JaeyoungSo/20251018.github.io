@@ -285,6 +285,21 @@
     font-size: 0.9em;
     margin-bottom: 0;
 }
+
+/* map-icons-wrapper 에 Flexbox 적용 */
+.map-icons-wrapper {
+    display: flex;             /* 자식 요소들을 한 줄에 배치하도록 설정 */
+    justify-content: center;   /* 가로 방향으로 자식 요소들을 가운데 정렬 */
+    align-items: center;       /* 세로 방향으로 자식 요소들을 가운데 정렬 (아이콘 높이가 다를 경우 대비) */
+    gap: 20px;                 /* 아이콘들 사이의 간격 (원하는 만큼 조절하세요) */
+}
+
+/* 기존 map-icon 클래스에 적용된 margin을 초기화합니다. */
+.map-icon {
+    margin: 0;                 /* 기존 마진을 제거하여 gap 속성과 충돌하지 않도록 합니다. */
+    width: 45px;               /* 아이콘 크기는 그대로 유지합니다. */
+    height: auto;
+}        
     </style>
     
     <body id="page-top">
@@ -416,26 +431,27 @@
                                 <br>
                             </p>
                             <hr>  
+
                             <div class="form-group">
                                 <div class="col-md-12">
-                                    <div class="my-3 text-center">
+                                    <div class="map-icons-wrapper my-3 text-center">
                                         <a href="https://naver.me/5S9QWcJd">
                                             <img alt="naver-map" class="map-icon" id="naver-map"
                                                 src="assets/img/map/naver-map.png"/>
                                         </a>
-                                        <a href="https://kko.to/NYdZbVMERT">
+                                        <a href="https://kko.kakao.com/ja9i8q57sk">
                                             <img alt="kakao-map" class="map-icon" id="kakao-map"
                                                 src="assets/img/map/kakao-map.png"/>
                                         </a>
                                     </div>
+                                </div>
                                     <!--
                                     <div class="my-3 map-container">
                                          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3234.7847717741224!2d128.68406357708722!3d35.829756021798545!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x35660998f3925631%3A0x959d7823a728853c!2z7Iqk7YOA65SU7JuAIOy7qOuypOyFmOybqOuUqQ!5e0!3m2!1sko!2skr!4v1751977825309!5m2!1sko!2skr" 
                                                 style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" scrolling="no"></iframe>
                                     </div>
-                                    -->
-                                </div>
-                            </div>                                
+                                    -->                                
+                            </div>
                             <div class="my-3 text-center">
                                 <img src="assets/img/map.jpg" alt="약도 이미지" class="img-fluid" style="max-width: 400px; margin: 0 auto; display: block; border: 1px solid #ddd; border-radius: 8px;">
                             </div>

@@ -240,7 +240,7 @@
                     shuffleCount = 0; // 3단계는 섞지 않음
                 } else { // 4단계부터
                     numPairs = 8; // 16장 고정
-                    // 4단계부터 섞는 횟수를 1씩 늘려감 (4단계: 1회, 5단계: 2회 ... )
+                    // 4단계: 1회, 5단계: 2회 ... (stage - 3)으로 계산
                     shuffleCount = (stage - 3); 
                 }
                 return { numPairs, cardCount: numPairs * 2, shuffleCount };

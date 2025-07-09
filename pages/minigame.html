@@ -231,17 +231,17 @@
 
                 if (stage === 1) {
                     numPairs = 2; // 4장
-                    shuffleCount = 3; 
+                    shuffleCount = 0; // 1단계는 섞지 않음
                 } else if (stage === 2) {
                     numPairs = 4; // 8장
-                    shuffleCount = 5; 
+                    shuffleCount = 0; // 2단계는 섞지 않음
                 } else if (stage === 3) {
                     numPairs = 8; // 16장
-                    shuffleCount = 7; 
+                    shuffleCount = 0; // 3단계는 섞지 않음
                 } else { // 4단계부터
                     numPairs = 8; // 16장 고정
-                    // 4단계부터 섞는 횟수를 1씩 늘려감 (3단계 횟수 7에서 시작)
-                    shuffleCount = 7 + (stage - 3); 
+                    // 4단계부터 섞는 횟수를 1씩 늘려감 (3단계까지 섞는 횟수는 0이므로, 4단계부터 시작)
+                    shuffleCount = (stage - 3); // 4단계: 1회, 5단계: 2회 ...
                 }
                 return { numPairs, cardCount: numPairs * 2, shuffleCount };
             }
@@ -260,7 +260,7 @@
                 
                 updateUI();
                 
-                const { numPairs, cardCount } = getStageConfig(gameStage);
+                const { numPairs } = getStageConfig(gameStage); // 초기 numPairs 가져옴
                 createCards(numPairs); 
                 positionCardsInitially(); // 초기 카드 생성 후, 실제 그리드 위치를 한 번 저장
 
@@ -276,29 +276,15 @@
             function resetStage() {
                 clearInterval(timerInterval);
                 
-                const { numPairs, cardCount, shuffleCount } = getStageConfig(gameStage);
+                const { numPairs, shuffleCount } = getStageConfig(gameStage);
                 timeLeft = calculateTimeLimit(numPairs); // 시간 제한도 카드 개수에 따라 조정
                 updateUI();
                 
-                // 카드를 섞기 전에 `cards` 배열의 순서를 무작위로 만듭니다.
-                // 주의: createCards를 다시 호출하므로, 여기서 shuffleArray(cards)는 필요 없음
-                // createCards가 새로운 cards 배열을 만들고, 그 안에서 섞습니다.
-                
-                // 셔플 전 모든 카드 상태 초기화 (뒷면으로, 클릭 불가능)
-                cards.forEach(card => {
-                    card.element.classList.remove('flipped', 'matched', 'shuffling'); 
-                    card.isFlipped = false;
-                    card.isMatched = false;
-                    card.element.style.pointerEvents = 'none'; 
-                    card.element.style.left = '';
-                    card.element.style.top = '';
-                    card.element.style.width = '';
-                    card.element.style.height = '';
-                    card.element.style.transform = ''; // 중요: transform 초기화 (뒷면 보이게)
-                    card.element.style.zIndex = '';
-                });
+                // 기존 카드 제거
+                cardGrid.innerHTML = ''; 
+                cards = []; // cards 배열도 초기화
 
-                // 새로운 스테이지에 맞는 카드 생성 및 DOM 재배치
+                // 새로운 스테이지에 맞는 카드 생성
                 createCards(numPairs); 
                 positionCardsInitially(); // 새로운 카드 생성 후 그리드 위치 다시 측정
 
@@ -306,44 +292,55 @@
                 const revealDelay = 500; // 카드 초기화 후 보여주기까지 짧은 딜레이
                 const revealTime = 10000; // 카드가 앞면으로 보여지는 총 시간 (10초)
 
-                setTimeout(() => {
-                    // 모든 카드 앞면으로 뒤집기
-                    cards.forEach(card => {
-                        if (!card.isMatched) { 
-                            card.element.classList.add('flipped'); 
-                        }
-                    });
+                // **수정된 부분: DOM이 완전히 반영되도록 더 확실하게 대기하고 강제 리플로우 유도**
+                requestAnimationFrame(() => { 
+                    requestAnimationFrame(() => { 
+                        // DOM 업데이트가 적용된 후, 강제 리플로우 유도
+                        cards.forEach(card => card.element.offsetWidth); // 중요: 강제 리플로우 유도
 
-                    // 2. 카드를 10초 동안 보여준 후 실행될 로직
-                    setTimeout(() => {
-                        // 모든 카드를 뒷면으로 뒤집기 (애니메이션)
+                        // 모든 카드를 앞면으로 뒤집기
                         cards.forEach(card => {
-                            if (!card.isMatched) {
-                                card.element.classList.remove('flipped'); // flipped 클래스 제거
+                            if (!card.isMatched) { 
+                                card.element.classList.add('flipped'); 
                             }
                         });
-                        
-                        // 카드가 뒷면으로 완전히 뒤집히는 애니메이션 시간을 기다립니다 (0.6초).
-                        // 이 시간 후에 셔플 준비를 시작합니다.
+
+                        // 2. 카드를 10초 동안 보여준 후 실행될 로직
                         setTimeout(() => {
-                            // 셔플 애니메이션을 위해 absolute 포지션 및 현재 위치 설정
+                            // 모든 카드를 뒷면으로 뒤집기 (애니메이션)
                             cards.forEach(card => {
                                 if (!card.isMatched) {
-                                    card.element.classList.add('shuffling'); 
-                                    card.element.style.left = `${card.currentX}px`;
-                                    card.element.style.top = `${card.currentY}px`;
-                                    card.element.style.width = `${cardWidth}px`; 
-                                    card.element.style.height = `${cardHeight}px`;
-                                    card.element.style.zIndex = '100'; 
+                                    card.element.classList.remove('flipped'); // flipped 클래스 제거
                                 }
                             });
-                            // 셔플 애니메이션 시작
-                            startShuffleAnimation(shuffleCount, shuffleCallback); // shuffleCount 전달
-                        }, 600); // 0.6초: 카드가 뒷면으로 뒤집히는 시간
+                            
+                            // 카드가 뒷면으로 완전히 뒤집히는 애니메이션 시간을 기다립니다 (0.6초).
+                            setTimeout(() => {
+                                // **셔플 동작 조건부 실행**
+                                if (shuffleCount > 0) { // 셔플 횟수가 0보다 클 때만 셔플 애니메이션 시작
+                                    // 셔플 애니메이션을 위해 absolute 포지션 및 현재 위치 설정
+                                    cards.forEach(card => {
+                                        if (!card.isMatched) {
+                                            card.element.classList.add('shuffling'); 
+                                            card.element.style.left = `${card.currentX}px`;
+                                            card.element.style.top = `${card.currentY}px`;
+                                            card.element.style.width = `${cardWidth}px`; 
+                                            card.element.style.height = `${cardHeight}px`;
+                                            card.element.style.zIndex = '100'; 
+                                        }
+                                    });
+                                    // 셔플 애니메이션 시작
+                                    startShuffleAnimation(shuffleCount, shuffleCallback); 
+                                } else { // 셔플하지 않는 단계 (1~3단계)
+                                    // 바로 카드 클릭 허용 및 타이머 시작
+                                    enableCardInteractionAndStartTimer();
+                                }
+                            }, 600); // 0.6초: 카드가 뒷면으로 뒤집히는 시간
 
-                    }, revealTime); // 카드가 앞면으로 보여지는 총 시간 (10초)
+                        }, revealTime); // 카드가 앞면으로 보여지는 총 시간 (10초)
 
-                }, revealDelay);
+                    });
+                });
             }
 
             // 시간 제한 계산 (카드 개수에 비례하여 조정)
@@ -374,8 +371,8 @@
                 }
                 shuffleArray(cardValues); // 어떤 이미지 짝이 어디에 갈지 결정
 
-                cardGrid.innerHTML = ''; 
-                cards = []; 
+                // cardGrid.innerHTML = ''; // resetStage에서 이미 처리
+                // cards = []; // resetStage에서 이미 처리
 
                 for (let i = 0; i < currentNumPairs * 2; i++) { // 현재 단계의 카드 개수만큼 생성
                     const cardElement = document.createElement('div');
@@ -448,6 +445,35 @@
 
             // --- 게임 로직 ---
 
+            // 카드 클릭 허용 및 타이머 시작 공통 함수
+            function enableCardInteractionAndStartTimer() {
+                // 셔플 관련 스타일 제거 (셔플하지 않는 경우에도 혹시 몰라 호출)
+                cards.forEach(card => {
+                    card.element.classList.remove('shuffling'); 
+                    card.element.style.width = ''; 
+                    card.element.style.height = ''; 
+                    card.element.style.left = ''; 
+                    card.element.style.top = ''; 
+                    card.element.style.transform = ''; 
+                    card.element.style.zIndex = ''; 
+                });
+
+                // DOM 재배치 후, 최종 그리드 위치를 다시 측정하여 currentX/Y 업데이트
+                // (셔플이 없어도 카드가 새로 생성되었으므로 필요)
+                positionCardsInitially(); 
+
+                setTimeout(() => {
+                    cards.forEach(card => {
+                        if (!card.isMatched) {
+                            card.element.style.pointerEvents = 'auto'; // 클릭 허용
+                        }
+                    });
+                    allowFlip = true; 
+                    startTimer(); 
+                }, 600); // DOM 리플로우 및 준비 시간 확보 (일관성을 위해 유지)
+            }
+
+
             // 셔플 애니메이션 완료 후 호출될 콜백 함수
             function shuffleCallback() {
                 // DOM을 재구성하여 논리적으로 섞인 `cards` 배열 순서를 반영
@@ -467,24 +493,13 @@
                     cardGrid.appendChild(card.element); 
                 });
                 
-                // DOM 재배치 후, 최종 그리드 위치를 다시 측정하여 currentX/Y 업데이트
-                positionCardsInitially(); 
-
-                // 카드 클릭 허용 및 타이머 시작
-                setTimeout(() => {
-                    cards.forEach(card => {
-                        if (!card.isMatched) {
-                            card.element.style.pointerEvents = 'auto'; // 클릭 허용
-                        }
-                    });
-                    allowFlip = true; 
-                    startTimer(); 
-                }, 600); // DOM 리플로우 및 준비 시간 확보
+                // 카드 클릭 허용 및 타이머 시작 (셔플 후)
+                enableCardInteractionAndStartTimer();
             }
 
 
             // --- 셔플 애니메이션 (두 카드 위치 교환) ---
-            async function startShuffleAnimation(shuffleCount, callback) { // shuffleCount를 인자로 받음
+            async function startShuffleAnimation(shuffleCount, callback) { 
                 const shuffleDuration = 500; 
 
                 for (let i = 0; i < shuffleCount; i++) {

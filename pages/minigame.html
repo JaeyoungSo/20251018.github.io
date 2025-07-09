@@ -125,10 +125,7 @@
             will-change: left, top; /* transform은 flipped 클래스에서 제어하므로 제외 */
             transition: left 0.5s ease-in-out, top 0.5s ease-in-out, z-index 0.3s; /* transform 제외 */
         }
-        /* 셔플 중에도 카드 뒷면이 보이면 안되므로 .shuffling과 .flipped가 함께 있을 때의 스타일은 유지 */
-        .card.shuffling.flipped {
-            transform: rotateY(180deg); /* 셔플 중에도 뒤집힌 상태 유지 */
-        }
+        /* 셔플 중에는 .flipped 클래스를 제거할 것이므로 .shuffling.flipped는 더이상 필요 없음 */
 
 
         /* 시작/게임오버 화면 */
@@ -288,31 +285,31 @@
 
                 // 1. 카드를 잠시 뒤집어서 보여주기
                 const revealDelay = 500; // 카드 초기화 후 보여주기까지 짧은 딜레이
-                const revealTime = 10000; // 카드가 보여지는 시간 (10초)
+                const revealTime = 10000; // 카드가 앞면으로 보여지는 총 시간 (10초)
 
                 setTimeout(() => {
+                    // 모든 카드 앞면으로 뒤집기
                     cards.forEach(card => {
                         if (!card.isMatched) { 
-                            card.element.classList.add('flipped'); // 모든 카드 앞면으로 뒤집기
+                            card.element.classList.add('flipped'); 
                         }
                     });
 
-                    // 2. 카드를 보여준 후, 10초가 지나면 실행될 로직
+                    // 2. 카드를 10초 동안 보여준 후 실행될 로직
                     setTimeout(() => {
-                        // 모든 카드를 다시 뒷면으로 돌립니다.
+                        // 모든 카드를 뒷면으로 뒤집기 (애니메이션)
                         cards.forEach(card => {
                             if (!card.isMatched) {
-                                card.element.classList.remove('flipped'); // 앞면 보여주는 상태 제거 (뒷면으로)
-                                // card.isFlipped = false; // 논리적 상태도 업데이트 (선택 사항이지만 일관성 위해)
+                                card.element.classList.remove('flipped'); // flipped 클래스 제거
                             }
                         });
                         
-                        // 카드가 뒷면으로 완전히 뒤집히는 애니메이션 시간을 기다립니다 (CSS transition: transform 0.6s).
+                        // 카드가 뒷면으로 완전히 뒤집히는 애니메이션 시간을 기다립니다 (0.6초).
                         // 이 시간 후에 셔플 준비를 시작합니다.
                         setTimeout(() => {
+                            // 셔플 애니메이션을 위해 absolute 포지션 및 현재 위치 설정
                             cards.forEach(card => {
                                 if (!card.isMatched) {
-                                    // 셔플 애니메이션을 위해 absolute 포지션 및 현재 위치 설정
                                     card.element.classList.add('shuffling'); 
                                     card.element.style.left = `${card.currentX}px`;
                                     card.element.style.top = `${card.currentY}px`;
@@ -323,7 +320,7 @@
                             });
                             // 셔플 애니메이션 시작
                             startShuffleAnimation(gameStage, shuffleCallback);
-                        }, 600); // 0.6초 뒤집히는 시간
+                        }, 600); // 0.6초: 카드가 뒷면으로 뒤집히는 시간
 
                     }, revealTime); // 카드가 앞면으로 보여지는 총 시간 (10초)
 
@@ -434,7 +431,7 @@
                 cardGrid.innerHTML = ''; 
                 cards.forEach(card => {
                     // 셔플 관련 스타일 제거 및 뒷면으로 돌리기
-                    card.element.classList.remove('shuffling', 'flipped'); // 셔플 스타일과 뒤집힌 상태 제거
+                    card.element.classList.remove('shuffling', 'flipped'); // 셔플 스타일 제거
                     card.isFlipped = false; // 논리적 상태도 뒷면으로
                     card.element.style.width = ''; 
                     card.element.style.height = ''; 

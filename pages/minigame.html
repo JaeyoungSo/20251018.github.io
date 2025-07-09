@@ -287,8 +287,8 @@
                 positionCardsInitially(); 
 
                 // 1. 카드를 잠시 뒤집어서 보여주기
-                const revealDelay = 500; // 카드 초기화 후 보여주기까지 딜레이
-                const revealTime = 10000; // 카드가 보여지는 시간 (10초로 증가)
+                const revealDelay = 500; // 카드 초기화 후 보여주기까지 짧은 딜레이
+                const revealTime = 10000; // 카드가 보여지는 시간 (10초)
 
                 setTimeout(() => {
                     cards.forEach(card => {
@@ -297,17 +297,18 @@
                         }
                     });
 
-                    // 2. 카드를 보여준 후, 셔플 애니메이션 준비 및 시작
+                    // 2. 카드를 보여준 후, 10초가 지나면 실행될 로직
                     setTimeout(() => {
-                        // 셔플 애니메이션 시작 전, 모든 카드를 다시 뒷면으로 돌립니다.
+                        // 모든 카드를 다시 뒷면으로 돌립니다.
                         cards.forEach(card => {
                             if (!card.isMatched) {
                                 card.element.classList.remove('flipped'); // 앞면 보여주는 상태 제거 (뒷면으로)
+                                // card.isFlipped = false; // 논리적 상태도 업데이트 (선택 사항이지만 일관성 위해)
                             }
                         });
                         
-                        // 뒷면으로 완전히 뒤집히는 애니메이션 시간을 기다립니다.
-                        // (CSS transition: transform 0.6s와 일치하게)
+                        // 카드가 뒷면으로 완전히 뒤집히는 애니메이션 시간을 기다립니다 (CSS transition: transform 0.6s).
+                        // 이 시간 후에 셔플 준비를 시작합니다.
                         setTimeout(() => {
                             cards.forEach(card => {
                                 if (!card.isMatched) {
@@ -317,14 +318,14 @@
                                     card.element.style.top = `${card.currentY}px`;
                                     card.element.style.width = `${cardWidth}px`; 
                                     card.element.style.height = `${cardHeight}px`;
-                                    // transform은 이제 완전히 초기화된 상태이므로 건드릴 필요 없습니다.
                                     card.element.style.zIndex = '100'; 
                                 }
                             });
+                            // 셔플 애니메이션 시작
                             startShuffleAnimation(gameStage, shuffleCallback);
-                        }, 600); // 카드가 뒷면으로 완전히 뒤집히는 시간 (CSS transform 0.6s)
+                        }, 600); // 0.6초 뒤집히는 시간
 
-                    }, revealTime);
+                    }, revealTime); // 카드가 앞면으로 보여지는 총 시간 (10초)
 
                 }, revealDelay);
             }

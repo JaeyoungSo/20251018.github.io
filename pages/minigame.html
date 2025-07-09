@@ -123,7 +123,8 @@
             position: absolute !important; 
             z-index: 100; 
             will-change: left, top, transform; /* 애니메이션 성능 최적화 */
-            /* width, height는 JS에서 설정되므로 CSS에서 고정값을 주지 않습니다 */
+            /* 셔플 중에는 transform: none; 이 적용되므로 flip이 해제됨 */
+            transition: left 0.5s ease-in-out, top 0.5s ease-in-out, z-index 0.3s; /* 플립 애니메이션 제외 */
         }
 
         /* 시작/게임오버 화면 */
@@ -259,18 +260,15 @@
                 shuffleArray(cards); 
 
                 cards.forEach(card => {
-                    card.element.classList.remove('flipped', 'matched');
+                    card.element.classList.remove('flipped', 'matched', 'shuffling'); // 모든 상태 초기화
                     card.isFlipped = false;
                     card.isMatched = false;
-                    card.element.style.pointerEvents = 'none'; // 셔플 중 클릭 방지
-                    
-                    // 셔플 애니메이션 시작 전 초기 상태 정리
-                    card.element.classList.remove('shuffling'); 
+                    card.element.style.pointerEvents = 'none'; // 클릭 방지
                     card.element.style.left = '';
                     card.element.style.top = '';
                     card.element.style.width = '';
                     card.element.style.height = '';
-                    card.element.style.transform = '';
+                    card.element.style.transform = ''; // 중요: transform 초기화
                     card.element.style.zIndex = '';
                 });
 
@@ -283,30 +281,32 @@
                 // 새로운 DOM 배치 후, 그리드 위치를 다시 정확히 측정하여 currentX/Y 업데이트
                 positionCardsInitially(); 
 
-                // 카드를 잠시 뒤집어서 보여준 후 셔플 애니메이션 시작
+                // 1. 카드를 뒤집어서 잠시 보여주는 애니메이션 시작
                 setTimeout(() => {
-                    // 카드를 보여주는 동작
                     cards.forEach(card => {
                         if (!card.isMatched) { 
-                            card.element.classList.add('flipped');
-                            card.isFlipped = true;
+                            card.element.classList.add('flipped'); // 카드 뒤집기
                         }
                     });
 
-                    const revealTime = 2000; // 카드를 보여주는 시간
+                    const revealTime = 2000; // 카드를 보여주는 시간 (2초)
+                    
+                    // 2. 카드를 보여준 후, 셔플 애니메이션 준비
                     setTimeout(() => {
-                        // 이제 셔플 애니메이션을 위해 absolute 포지셔닝으로 전환 및 z-index 설정
                         cards.forEach(card => {
                             if (!card.isMatched) {
-                                card.element.classList.add('shuffling'); 
+                                // 셔플 애니메이션을 위해 absolute 포지션 및 현재 위치 설정
+                                // 주의: 이 시점에는 `transform: rotateY(180deg)` 상태를 유지해야 함
+                                card.element.classList.add('shuffling'); // shuffling 클래스 추가 (position:absolute)
                                 card.element.style.left = `${card.currentX}px`;
                                 card.element.style.top = `${card.currentY}px`;
                                 card.element.style.width = `${cardWidth}px`; 
                                 card.element.style.height = `${cardHeight}px`;
-                                card.element.style.transform = 'none'; // 뒤집힌 상태 유지하며 정면 보이게
+                                // card.element.style.transform = 'none'; // 이 줄을 제거하여 뒤집힌 상태 유지
                                 card.element.style.zIndex = '100'; // 셔플 중 z-index 높임
                             }
                         });
+                        // 3. 셔플 애니메이션 시작
                         startShuffleAnimation(gameStage, shuffleCallback);
                     }, revealTime);
 
@@ -418,13 +418,13 @@
                 cardGrid.innerHTML = ''; 
                 cards.forEach(card => {
                     // 셔플 관련 스타일 제거 및 뒷면으로 돌리기
-                    card.element.classList.remove('shuffling', 'flipped'); 
+                    card.element.classList.remove('shuffling', 'flipped'); // 셔플 스타일과 뒤집힌 상태 제거
                     card.isFlipped = false; // 논리적 상태도 뒷면으로
                     card.element.style.width = ''; 
                     card.element.style.height = ''; 
                     card.element.style.left = ''; 
                     card.element.style.top = ''; 
-                    card.element.style.transform = ''; 
+                    card.element.style.transform = ''; // 중요: transform 초기화 (뒷면 보이도록)
                     card.element.style.zIndex = ''; 
 
                     // 섞인 순서대로 DOM에 다시 추가

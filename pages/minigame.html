@@ -349,10 +349,16 @@
             }
 
             // 시간 제한 계산 (카드 개수에 비례하여 조정)
-            function calculateTimeLimit(numPairs) {
-                // 필요에 따라 이 공식을 조정하세요. (예: 2쌍일 때 15초, 4쌍일 때 30초, 8쌍일 때 60초)
-                return Math.max(10, numPairs * 7.5); 
-            }
+	function calculateTimeLimit(numPairs) {
+	    // 기본 계산 방식: 카드 쌍 개수 * 7.5초
+	    let baseTime = numPairs * 7.5; 
+    
+	    // 최소 시간 10초 보장
+	    let adjustedTime = Math.max(10, baseTime);
+
+	    // 최종적으로 계산된 시간을 2/3로 조정
+	    return Math.round(adjustedTime * (2 / 3)); // 소수점은 반올림 처리
+	}
 
             function startTimer() {
                 clearInterval(timerInterval);

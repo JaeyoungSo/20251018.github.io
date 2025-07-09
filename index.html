@@ -615,15 +615,23 @@
                             </div>
 
                             
-                        <div style="text-align: center; margin-top: 30px;">
-                            <iframe src="pages/minigame.html" 
-                                    width="100%" 
-                                    height="600px" 
-                                    frameborder="0" 
-                                    scrolling="no"
-                                    style="max-width: 600px; border: 1px solid #ddd; border-radius: 10px;">
-                            </iframe>
-                        </div>
+                            <div style="
+                                display: flex; /* Flexbox 활성화 */
+                                justify-content: center; /* 가로 중앙 정렬 */
+                                align-items: center; /* 세로 중앙 정렬 */
+                                min-height: 100vh; /* 뷰포트 높이의 100%를 최소 높이로 설정 */
+                                /* 또는 게임이 들어갈 부모 요소의 높이를 명확히 지정 (예: height: 800px;) */
+                                margin: 0; /* 기본 마진 제거 */
+                                padding: 0; /* 기본 패딩 제거 */
+                            ">
+                                <iframe src="minigame.html" 
+                                        width="100%" 
+                                        height="300px" /* 게임 내용이 잘리지 않는 적절한 높이로 조절 */
+                                        frameborder="0" 
+                                        scrolling="no"
+                                        style="max-width: 600px; border: 1px solid #ddd; border-radius: 10px;">
+                                </iframe>
+                            </div>
 
                             
                         </div>

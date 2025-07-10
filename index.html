@@ -416,6 +416,83 @@
     #music-control.playing i {
         color: #337ab7; /* 파란색 계열 */
     }
+
+       /* 전체 컨테이너 스타일 */
+        .info-container {
+            font-family: 'Noto Sans KR', sans-serif; /* 폰트 적용 */
+            color: #333; /* 기본 글자 색상 */
+            line-height: 1.6; /* 줄 간격 */
+            margin: 20px; /* 외부 여백 */
+            padding: 20px; /* 내부 여백 */
+            border: 1px solid #eee; /* 테두리 */
+            border-radius: 8px; /* 둥근 모서리 */
+            max-width: 600px; /* 최대 너비 */
+            margin-left: auto; /* 가운데 정렬 */
+            margin-right: auto; /* 가운데 정렬 */
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05); /* 은은한 그림자 */
+        }
+
+        /* 섹션 제목 스타일 (예: 오시는 길 안내) */
+        .info-main-title {
+            text-align: center;
+            color: #555;
+            margin-bottom: 30px;
+            font-size: 1.8em; /* 글자 크기 */
+            font-weight: 500; /* 글자 굵기 */
+            border-bottom: 1px solid #f0f0f0; /* 아래 밑줄 */
+            padding-bottom: 15px;
+        }
+
+        /* 각 정보 섹션 (주소, 전화, 버스노선 등) */
+        .info-section {
+            margin-bottom: 25px; /* 섹션별 아래 여백 */
+        }
+
+        /* 각 정보 섹션의 제목 (예: 주소, 전화) */
+        .info-section-title {
+            font-weight: bold; /* 글자 굵게 */
+            color: #444; /* 글자 색상 */
+            font-size: 1.1em; /* 글자 크기 */
+            margin-bottom: 8px; /* 제목 아래 여백 */
+        }
+
+        /* 각 정보 섹션의 내용 */
+        .info-content {
+            margin-left: 15px; /* 들여쓰기 */
+            margin-bottom: 5px; /* 각 줄의 아래 여백 */
+        }
+
+        /* 목록 스타일 (버스 노선) */
+        .info-list {
+            list-style: none; /* 기본 리스트 마커 제거 */
+            padding-left: 15px; /* 들여쓰기 */
+            margin: 0; /* 기본 마진 제거 */
+        }
+
+        .info-list-item {
+            margin-bottom: 5px; /* 리스트 항목별 아래 여백 */
+        }
+
+        /* 보조 텍스트 (예: 내비게이션 검색, 환승 안내) */
+        .info-sub-text {
+            color: #777; /* 회색 텍스트 */
+            font-size: 0.95em; /* 약간 작은 글자 */
+            margin-left: 15px; /* 들여쓰기 */
+        }
+
+        /* 강조 텍스트 (예: 예식 시간 전부터 운행) */
+        .info-highlight-text {
+            color: #a00; /* 붉은색 텍스트 (강조) */
+            font-size: 0.95em; /* 약간 작은 글자 */
+            margin-left: 15px; /* 들여쓰기 */
+            font-weight: bold;
+        }
+
+        /* 특정 키워드 강조 */
+        .keyword {
+            font-weight: bold;
+            color: #333; /* 기본 텍스트 색상 유지 또는 변경 */
+        }        
     </style>
     
     <body id="page-top">
@@ -491,6 +568,50 @@
                             </div>
                             
                             <div id="naver-map-container"></div>
+
+                            <div class="info-container">
+                        
+                                <h3 class="info-main-title">오시는 길 안내</h3>
+                        
+                                <div class="info-section">
+                                    <p class="info-section-title">주소</p>
+                                    <p class="info-content">대구광역시 수성구 대흥동 504번지</p>
+                                    <p class="info-content">스타디움컨벤션웨딩 (구 오월의정원수성점)</p>
+                                    <p class="info-sub-text">- 내비게이션 검색: <span class="keyword">대구스포츠기념관</span></p>
+                                </div>
+                        
+                                <div class="info-section">
+                                    <p class="info-section-title">전화</p>
+                                    <p class="info-content">053)791-3900</p>
+                                </div>
+                        
+                                <div class="info-section">
+                                    <p class="info-section-title">버스 노선</p>
+                                    <ul class="info-list">
+                                        <li class="info-list-item">- 경기장네거리 정차: 609, 수성6, 894, 949</li>
+                                        <li class="info-list-item">- 수성구 대흥동 앞 정차: 수성3-1</li>
+                                        <li class="info-list-item">- 대흥동 건너 정차: 수성3</li>
+                                        <li class="info-list-item">- 달구벌대로 정차(알파시티역 5번 출구): 100-1, 399, 990, 309, 349, 509, 609, 649, 724, 840, 937, 수성3, 848, 894</li>
+                                        <li class="info-sub-text">→ <span class="keyword">대구스타디움</span> 또는 <span class="keyword">대흥동</span> 정차 버스로 환승</li>
+                                    </ul>
+                                </div>
+                        
+                                <div class="info-section">
+                                    <p class="info-section-title">셔틀버스 운행</p>
+                                    <p class="info-content">지하철 2호선 신매역 하차 후 3번 출구, 소방서 앞</p>
+                                    <p class="info-highlight-text">(예식 1시간 전부터 20분 간격 운행)</p>
+                                </div>
+                        
+                                <div class="info-section">
+                                    <p class="info-section-title">고속도로 이용</p>
+                                    <p class="info-content">동대구분기점 진입 후 대구부산고속도로 수성IC 이용</p>
+                                </div>
+                        
+                                <div class="info-section" style="margin-bottom: 0;"> <p class="info-section-title">관광버스 이용</p>
+                                    <p class="info-content">셔틀버스 타는 곳이라는 현수막 배너 앞(공원내)에서 하객분들은 하차, 관광버스는 버스주차장 이용</p>
+                                </div>
+                        
+                            </div>                            
 
                             <p class="font-size-md">
                                 <br>

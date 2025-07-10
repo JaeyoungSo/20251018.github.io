@@ -831,13 +831,10 @@
                     return;
                 }
 
-                const seconds = Math.floor((diff / 1000) % 60);
-                const minutes = Math.floor((diff / (1000 * 60)) % 60);
-                const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
                 const days = Math.floor(diff / (1000 * 60 * 60 * 24));
 
-                // 두 자리 숫자로 표시하기 위해 padStart 사용
-                dDayFloatingCounter.textContent = `D-${days} ${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+                // 시간 정보 제외하고 'D-days'만 표시
+                dDayFloatingCounter.textContent = `D-${days}`;
             }
 
             // 1초마다 D-day 업데이트

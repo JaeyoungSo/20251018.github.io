@@ -492,7 +492,24 @@
         .keyword {
             font-weight: bold;
             color: #333; /* 기본 텍스트 색상 유지 또는 변경 */
-        }        
+        }    
+        
+        /* D-day 카운터 스타일 */
+        #d-day-counter {
+            font-family: 'Song Myung', serif; /* 기존 날짜 폰트와 통일 */
+            color: white;
+            font-size: 1.5em; /* D-day 폰트 크기 조절 */
+            margin-top: 10px; /* 날짜와 D-day 사이 간격 */
+            margin-bottom: 10px; /* D-day와 장소 사이 간격 */
+            font-weight: bold;
+            letter-spacing: 0.05em; /* 글자 간격 */
+        }
+
+        @media (max-width: 768px) {
+            #d-day-counter {
+                font-size: 1.2em; /* 모바일에서 폰트 크기 조정 */
+            }
+        }
     </style>
     
     <body id="page-top">
@@ -515,7 +532,9 @@
                     <h2 class="masthead-title">소재영 · 박다은 결혼합니다</h2>
                     <br>
                     <p class="masthead-date-location" style="font-size: 1.4em;">
-                        <br>2025.10.18 토요일 12:00<br>대구스타디움 컨벤션<br>2층 컨벤션홀
+                        <br>2025.10.18 토요일 12:00<br>
+                        <span id="d-day-counter"></span>
+                        대구스타디움 컨벤션<br>2층 컨벤션홀
                     </p>
                 </div>
             </header> 
@@ -787,7 +806,34 @@
             const audio = document.getElementById('background-music');
             // 새로 추가된 부분
             const musicControl = document.getElementById('music-control'); 
-            
+            const dDayCounter = document.getElementById('d-day-counter'); // D-day 카운터 요소
+
+            // 결혼식 날짜와 시간 설정 (2025년 10월 18일 12시 0분 0초 KST)
+            const weddingDate = new Date('2025-10-18T12:00:00+09:00'); // KST는 UTC+9
+
+            function updateDDay() {
+                const now = new Date();
+                const diff = weddingDate.getTime() - now.getTime(); // 밀리초 단위 차이
+
+                // 결혼식 날짜가 이미 지났을 경우
+                if (diff <= 0) {
+                    dDayCounter.textContent = '저희 결혼했어요!';
+                    clearInterval(dDayInterval); // 카운터 정지
+                    return;
+                }
+
+                const seconds = Math.floor((diff / 1000) % 60);
+                const minutes = Math.floor((diff / (1000 * 60)) % 60);
+                const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+
+                dDayCounter.textContent = `D-${days} ${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+            }
+
+            // 1초마다 D-day 업데이트
+            let dDayInterval = setInterval(updateDDay, 1000);
+            updateDDay(); // 페이지 로드 시 즉시 업데이트
+
             seal.addEventListener('click', () => {
                 sealedScreen.style.opacity = '0';
                 setTimeout(() => {

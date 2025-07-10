@@ -47,7 +47,7 @@
         }
     }
 
-    /* 모든 이미지와 비디오는 부모 컨테이너에 맞게 최대 너위 설정 */
+    /* 모든 이미지와 비디오는 부모 컨테이너에 맞게 최대 너비 설정 */
     img, video {
         max-width: 100%;
         height: auto;
@@ -393,7 +393,7 @@
         z-index: 10000; /* 다른 요소들 위에 오도록 높은 z-index 설정 */
         background-color: rgba(255, 255, 255, 0.7); /* 반투명 배경 */
         border-radius: 50%; /* 원형 버튼 */
-        width: 40px; /* 버튼 너위 */
+        width: 40px; /* 버튼 너비 */
         height: 40px; /* 버튼 높이 */
         display: flex;
         justify-content: center;
@@ -426,7 +426,7 @@
             padding: 20px; /* 내부 여백 */
             border: 1px solid #eee; /* 테두리 */
             border-radius: 8px; /* 둥근 모서리 */
-            max-width: 600px; /* 최대 너위 */
+            max-width: 600px; /* 최대 너비 */
             margin-left: auto; /* 가운데 정렬 */
             margin-right: auto; /* 가운데 정렬 */
             box-shadow: 0 4px 8px rgba(0,0,0,0.05); /* 은은한 그림자 */
@@ -772,7 +772,7 @@
                                         frameborder="0" 
                                         scrolling="no"
                                         style="
-                                            max-width: 600px; /* iframe의 최대 너위는 유지 */
+                                            max-width: 600px; /* iframe의 최대 너비는 유지 */
                                             border: 1px solid #ddd; 
                                             border-radius: 10px;
                                         ">
@@ -823,11 +823,15 @@
             function updateDDay() {
                 const now = new Date();
                 
-                // D-day 계산을 위한 기준 날짜를 결혼식 날짜의 자정으로 설정
-                const targetDateForDDay = new Date(weddingDate);
-                targetDateForDDay.setHours(0, 0, 0, 0); // 결혼식 날짜의 자정으로 설정 (한국 시간)
+                // 현재 날짜의 자정 (00:00:00)을 기준으로 설정
+                const nowMidnight = new Date(now);
+                nowMidnight.setHours(0, 0, 0, 0);
 
-                const diff = targetDateForDDay.getTime() - now.getTime(); // 밀리초 단위 차이
+                // 결혼식 날짜의 자정 (00:00:00)을 기준으로 설정
+                const weddingMidnight = new Date(weddingDate); 
+                weddingMidnight.setHours(0, 0, 0, 0); // 결혼식 날짜의 자정으로 설정 (한국 시간)
+
+                const diff = weddingMidnight.getTime() - nowMidnight.getTime(); // 밀리초 단위 차이
 
                 // 결혼식 날짜가 이미 지났을 경우
                 if (diff <= 0) {
@@ -836,7 +840,7 @@
                     return;
                 }
 
-                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const days = Math.floor(diff / (1000 * 60 * 60 * 24)); // Calculate full days
 
                 // 시간 정보 제외하고 'D-days'만 표시
                 dDayFloatingCounter.textContent = `D-${days}`;

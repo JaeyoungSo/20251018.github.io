@@ -387,7 +387,7 @@
     /* 새로 추가할 음악 제어 버튼 스타일 */
     #music-control {
         position: fixed; /* 화면에 고정 */
-        top: 65px; /* 상단에서 65px 아래 (D-day 카운터 아래에 오도록) */
+        top: 15px; /* 상단에서 15px 아래 */
         left: 50%; /* 가로 중앙 정렬을 위해 50% */
         transform: translateX(-50%); /* 정확한 중앙 정렬 */
         z-index: 10000; /* 다른 요소들 위에 오도록 높은 z-index 설정 */
@@ -497,9 +497,10 @@
         /* D-day 플로팅 카운터 스타일 */
         #d-day-floating-counter {
             position: fixed; /* 화면에 고정 */
-            top: 15px; /* 상단에서 15px 아래 (음소거 버튼 위에 오도록) */
-            left: 50%; /* 가로 중앙 정렬을 위해 50% */
-            transform: translateX(-50%); /* 정확한 중앙 정렬 */
+            top: 15px; /* 상단에서 15px 아래 */
+            right: 15px; /* 우측에서 15px 왼쪽 */
+            /* left: 50%; (이전 코드, 삭제) */
+            /* transform: translateX(-50%); (이전 코드, 삭제) */
             z-index: 10001; /* 음소거 버튼보다 높은 z-index */
             background-color: rgba(0, 0, 0, 0.5); /* 반투명 배경 */
             color: white;

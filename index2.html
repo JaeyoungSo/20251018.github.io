@@ -1,0 +1,1029 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+        <meta property="og:image" content="assets/img/url-main.jpg">
+        <meta property="og:description" content="2025.10.18 재영 · 다은 결혼합니다.2"/>
+        <meta charset="utf-8" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>재영 · 다은</title>
+        <link rel="icon" type="image/x-icon" href="assets/favicon.ico"/>
+        <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.5.5/css/simple-line-icons.min.css" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css" />
+        <link href="css/styles.css" rel="stylesheet" />
+        
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Song+Myung&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap" rel="stylesheet">
+
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&display=swap" rel="stylesheet">
+    </head>
+    
+    <style>
+    /* 폰트 크기 및 기본적인 반응형 설정 */
+    body {
+        background: #fbf0ea; /* 원하는 배경색 */
+        font-size: 16px; /* 기본 폰트 크기 (rem의 기준) */
+        line-height: 1.6;
+        margin: 0;
+        padding: 0;
+        overflow-x: hidden; /* 가로 스크롤 방지 */
+    }
+
+    /* 모바일 기기에서 폰트 크기 조정 */
+    @media (max-width: 768px) { /* 태블릿/모바일 */
+        body {
+            font-size: 14px; /* 모바일에서 텍스트 크기 약간 줄임 */
+        }
+    }
+    @media (max-width: 480px) { /* 작은 모바일 화면 */
+        body {
+            font-size: 13px; /* 더 작은 모바일에서 텍스트 크기 더 줄임 */
+        }
+    }
+
+    /* 모든 이미지와 비디오는 부모 컨테이너에 맞게 최대 너비 설정 */
+    img, video {
+        max-width: 100%;
+        height: auto;
+        display: block; /* 이미지 하단 공백 제거 */
+    }
+
+    /* Bootstrap 컨테이너들이 화면 너비를 벗어나지 않도록 명시 */
+    .container, .container-fluid {
+        max-width: 100%;
+        padding-left: 15px; /* 양쪽 패딩 */
+        padding-right: 15px;
+        box-sizing: border-box; /* 패딩이 너비에 포함되도록 */
+    }
+
+    /* 이미지 페이드 효과 */
+    .image-fade img {
+      display: block;
+      width: 100%;
+      height: auto;
+      -webkit-mask-image: linear-gradient(to bottom, black 85%, transparent 100%);
+      mask-image: linear-gradient(to bottom, black 85%, transparent 100%);
+      -webkit-mask-size: 100% 100%;
+      mask-size: 100% 100%;
+      -webkit-mask-repeat: no-repeat;
+      mask-repeat: no-repeat;
+    }
+
+    /* 메인 헤더 (Masthead) 스타일 */
+    .masthead {
+      position: relative;
+      background-image: url('assets/img/main.jpg');
+      background-size: cover;
+      background-position: center;
+      height: 100vh;
+      overflow: hidden;
+      display: flex; /* Flexbox 추가 */
+      align-items: flex-end; /* 하단 정렬 */
+      justify-content: center; /* 가운데 정렬 */
+      text-align: center; /* 텍스트 가운데 정렬 */
+    }
+    .masthead .container {
+        position: relative;
+        z-index: 3;
+        /* 하단 여백 추가로 텍스트가 너무 바닥에 붙지 않도록 */
+        padding-bottom: 50px; /* 조절 가능 */
+    }
+    .masthead h2 { /* 기존 인라인 스타일 대체 */
+        font-family: 'Amatic SC', sans-serif; 
+        color: white; 
+        font-weight: bold;
+        font-size: 2.2em; /* 상대적인 크기로 조정 */
+        margin-bottom: 0.5rem; /* 제목 간 간격 조절 */
+    }
+    .masthead p { /* 기존 인라인 스타일 대체 */
+        font-family: 'Song Myung', serif; 
+        color: white; 
+        font-size: 0.8125rem; /* 13px / 16px = 0.8125rem */
+        line-height: 1.4; /* 줄 간격 조절 */
+    }
+    /* 흐림 효과를 위한 오버레이 */
+    .gradient-fade {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 30%; /* 흐림 높이 조절, 텍스트가 바닥에 너무 붙지 않게 */
+      background: linear-gradient(to bottom, rgba(255, 240, 234, 0) 0%, #fbf0ea 100%);
+      pointer-events: none;
+      z-index: 2;
+    }
+    
+    /* 봉인된 화면 스타일 */
+    #sealed-screen {
+        position: fixed;
+        top: 0; left: 0;
+        width: 100vw; height: 100vh;
+        background-color: #fbf0ea;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+        transition: opacity 1s ease-out;
+    }
+    #seal {
+        width: 180px;
+        height: 180px;
+        background: url('assets/img/seal.png') no-repeat center center;
+        background-size: contain;
+        cursor: pointer;
+        animation: pulse 1.5s infinite;
+        -webkit-tap-highlight-color: transparent;
+    }
+    #seal-text {
+        margin-top: 25px;
+        font-size: 1.2em;
+        color: #555;
+        font-family: 'Song Myung', serif;
+        text-align: center;
+        line-height: 1.5;
+    }
+    /* 봉인 씰 깜빡임 애니메이션 */
+    @keyframes pulse {
+        0% { transform: scale(1); opacity: 1; }
+        50% { transform: scale(1.05); opacity: 0.8; }
+        100% { transform: scale(1); opacity: 1; }
+    }
+
+    /* 메인 콘텐츠는 초기에는 숨김 */
+    #main-wrapper {
+        display: none;
+    }
+
+    /* 네이버 지도 스타일 */
+    #naver-map-container {
+        width: 100%;
+        max-width: 600px; /* 지도의 최대 너비를 설정 */
+        height: 300px; /* 지도의 높이 설정 */
+        margin: 20px auto; /* 위아래 여백과 가운데 정렬 */
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+    /* 폰트 크기 클래스 정의 (인라인 스타일 대체) */
+    .font-size-lg { font-size: 1.25rem; 
+                    font-family: "Nanum Pen Script", cursive;
+                    font-weight: 400;
+                    font-style: normal;
+                  } /* 20px */
+    .font-size-md { font-size: 1rem; 
+                    font-family: "Nanum Pen Script", cursive;
+                    font-weight: 400;
+                    font-style: normal;
+                    
+                    font-size: 1.5em;
+                  }    /* 16px */
+    .font-size-sm { font-size: 0.9375rem; } /* 15px */
+    .font-size-xs { font-size: 0.8125rem; } /* 13px */
+    .font-size-xxs { font-size: 0.75rem; }  /* 12px */
+    .font-size-xxxs { font-size: 0.625rem; } /* 10px */
+    .font-size-xl { font-size: 1.5625rem; } /* 25px */
+    .font-size-xxl { font-size: 2em; } /* Masthead 제목에 사용 */
+
+
+    /* 기타 요소들 패딩 및 마진 조정 (기존 Bootstrap 클래스와 중복될 수 있으니 확인 필요) */
+    section {
+        padding-top: 60px; /* 섹션 상단 패딩 */
+        padding-bottom: 60px; /* 섹션 하단 패딩 */
+    }
+    @media (max-width: 768px) {
+        section {
+            padding-top: 40px;
+            padding-bottom: 40px;
+        }
+    }
+    .img-fluid.rounded-circle {
+        width: 150px; /* 원형 이미지 크기 조정 */
+        height: 150px;
+        object-fit: cover; /* 이미지 비율 유지 */
+        margin-top: 15px; /* 이미지 상단 여백 */
+        margin-bottom: 15px; /* 이미지 하단 여백 */
+    }
+    .map-icon {
+        width: 45px; /* 아이콘 크기 적절히 조절 */
+        height: auto;
+        margin: 0 10px; /* 아이콘 사이 간격 */
+    }
+
+    /* 혼주 연락처보기 버튼 텍스트 크기 조정 */
+    .toggle-button {
+        font-size: 1.25rem !important; /* 20px 기준 */
+    }
+    .foldable-content p {
+        font-size: 0.9375rem !important; /* 15px 기준 */
+    }
+    .foldable-content3 p {
+        font-size: 0.75rem !important; /* 12px 기준 */
+    }
+    .foldable-content3 p.font-size-xxxs {
+        font-size: 0.625rem !important; /* 10px 기준 */
+    }
+    .btn.btn-xl { /* 버튼 폰트 크기 조정 */
+        font-size: 0.8rem !important; /* 12px 기준 */
+        padding: 0.8rem 1.6rem;
+    }
+
+    /* `hr` 요소의 `margin` 조정 */
+    hr {
+        margin: 2rem 0 !important; /* 위아래 여백을 2rem으로 조정 */
+    }
+/* 캐러셀 (사진첩) 관련 스타일 */
+#photoCarousel {
+    max-width: 600px; /* 캐러셀의 최대 너비를 조절 (원하는 크기로) */
+    margin: 40px auto; /* 위아래 여백과 가운데 정렬 */
+    border-radius: 8px; /* 모서리 둥글게 */
+    overflow: hidden; /* 모서리가 둥근 테두리 안으로 이미지가 잘리도록 */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* 은은한 그림자 효과 */
+}
+
+#photoCarousel .carousel-item img {
+    height: 400px; /* 이미지 높이를 고정 (원하는 높이로 조절) */
+    object-fit: cover; /* 이미지가 잘리지 않고 비율에 맞게 채워지도록 */
+}
+
+/* 모바일 화면에서 캐러셀 높이 조절 */
+@media (max-width: 768px) {
+    #photoCarousel .carousel-item img {
+        height: 300px; /* 모바일에서 캐러셀 이미지 높이 조절 */
+    }
+}
+@media (max-width: 480px) {
+    #photoCarousel .carousel-item img {
+        height: 250px; /* 더 작은 모바일에서 높이 조절 */
+    }
+}
+
+/* 캐러셀 캡션 스타일 (필요시 조절) */
+#photoCarousel .carousel-caption {
+    background-color: rgba(0, 0, 0, 0.5); /* 반투명 배경 */
+    border-radius: 5px;
+    padding: 10px;
+    bottom: 20px; /* 하단에서 여백 */
+}
+
+#photoCarousel .carousel-caption h5 {
+    font-family: 'Song Myung', serif;
+    color: white;
+    font-size: 1.2em;
+    margin-bottom: 5px;
+}
+
+#photoCarousel .carousel-caption p {
+    font-family: 'Gowun Dodum', sans-serif;
+    color: #e0e0e0;
+    font-size: 0.9em;
+    margin-bottom: 0;
+}
+
+/* map-icons-wrapper 에 Flexbox 적용 */
+.map-icons-wrapper {
+    display: flex;           /* 자식 요소들을 한 줄에 배치하도록 설정 */
+    justify-content: center;   /* 가로 방향으로 자식 요소들을 가운데 정렬 */
+    align-items: center;     /* 세로 방향으로 자식 요소들을 가운데 정렬 (아이콘 높이가 다를 경우 대비) */
+    gap: 20px;                 /* 아이콘들 사이의 간격 (원하는 만큼 조절하세요) */
+}
+
+/* 기존 map-icon 클래스에 적용된 margin을 초기화합니다. */
+.map-icon {
+    margin: 0;                 /* 기존 마진을 제거하여 gap 속성과 충돌하지 않도록 합니다. */
+    width: 45px;                 /* 아이콘 크기는 그대로 유지합니다. */
+    height: auto;
+}         
+
+/* 계좌 정보 섹션 스타일 */
+.account-info-section {
+    margin-top: 20px; /* 상단 여백 */
+    margin-bottom: 30px; /* 하단 여백 */
+    padding: 0 15px; /* 좌우 패딩 */
+
+}
+
+/* 각 계좌 항목 스타일 */
+.account-item {
+    display: flex; /* Flexbox를 사용하여 항목들을 한 줄에 배치 */
+    align-items: center; /* 세로 중앙 정렬 */
+    justify-content: space-between; /* 항목들을 양 끝으로 벌려서 배치 */
+    padding: 12px 0; /* 위아래 패딩 */
+    border-bottom: 1px dashed #eee; /* 각 항목 구분선 */
+    flex-wrap: wrap; /* 작은 화면에서 항목이 줄바꿈될 수 있도록 설정 */
+}
+
+/* 마지막 항목의 구분선 제거 */
+.account-item:last-child {
+    border-bottom: none;
+}
+
+/* 계좌 소유자 이름 스타일 */
+.account-owner {
+    font-weight: bold; /* 볼드체 */
+    min-width: 90px; /* 최소 너비 지정으로 이름 영역 확보 */
+    text-align: left;
+    white-space: nowrap; /* 이름이 줄바꿈되지 않도록 */
+    margin-right: 10px; /* 다음 요소와의 간격 */
+}
+
+/* 계좌 상세 정보 스타일 */
+.account-detail {
+    flex-grow: 1; /* 가능한 공간을 모두 차지하도록 확장 */
+    text-align: left; /* 좌측 정렬 */
+    color: #555; /* 글자색 조정 */
+    margin-right: 10px; /* 버튼과의 간격 */
+    white-space: nowrap; /* 한줄로 유지 */
+    overflow: hidden; /* 넘치는 내용은 숨김 */
+    text-overflow: ellipsis; /* 넘치는 내용은 ...으로 표시 */
+}
+
+/* 복사 버튼 스타일 */
+.copy-btn {
+    white-space: nowrap; /* 버튼 텍스트가 줄바꿈되지 않도록 */
+    padding: 5px 12px;
+    font-size: 0.85em; /* 버튼 글자 크기 조정 */
+    border-radius: 5px; /* 버튼 모서리 둥글게 */
+}
+
+/* 복사 완료 피드백 메시지 스타일 */
+.copy-feedback {
+    margin-left: 10px;
+    color: #28a745; /* 초록색 */
+    font-size: 0.9em;
+    opacity: 0; /* 초기에는 숨김 */
+    transition: opacity 0.3s ease-in-out; /* 부드러운 나타남/사라짐 효과 */
+    white-space: nowrap; /* 메시지가 줄바꿈되지 않도록 */
+}
+
+/* 복사 완료 메시지 표시 시 */
+.copy-feedback.show {
+    opacity: 1;
+}
+
+/* 모바일 화면 등 작은 해상도에서 레이아웃 조정 */
+@media (max-width: 576px) {
+    .account-item {
+        flex-direction: column; /* 세로 방향으로 항목 배치 */
+        align-items: flex-start; /* 왼쪽 정렬 */
+    }
+    .account-owner {
+        width: 100%; /* 너비 전체 사용 */
+        margin-bottom: 5px; /* 하단 여백 */
+        margin-right: 0;
+    }
+    .account-detail {
+        width: 100%; /* 너비 전체 사용 */
+        margin-bottom: 5px;
+        margin-right: 0;
+    }
+    .copy-btn {
+        width: 100%; /* 너비 전체 사용 */
+        margin-top: 5px;
+    }
+    .copy-feedback {
+        margin-top: 5px;
+        margin-left: 0;
+        width: 100%;
+        text-align: center;
+    }
+}          
+    /* 새로 추가할 음악 제어 버튼 스타일 */
+    #music-control {
+        position: fixed; /* 화면에 고정 */
+        top: 15px; /* 상단에서 15px 아래 */
+        left: 50%; /* 가로 중앙 정렬을 위해 50% */
+        transform: translateX(-50%); /* 정확한 중앙 정렬 */
+        z-index: 10000; /* 다른 요소들 위에 오도록 높은 z-index 설정 */
+        background-color: rgba(255, 255, 255, 0.7); /* 반투명 배경 */
+        border-radius: 50%; /* 원형 버튼 */
+        width: 40px; /* 버튼 너비 */
+        height: 40px; /* 버튼 높이 */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.2); /* 그림자 효과 */
+        cursor: pointer;
+        transition: background-color 0.2s ease-in-out;
+    }
+
+    #music-control:hover {
+        background-color: rgba(255, 255, 255, 0.9); /* 호버 시 배경색 변경 */
+    }
+
+    #music-control i {
+        color: #888; /* 아이콘 색상 */
+        font-size: 1.2em; /* 아이콘 크기 */
+    }
+
+    /* 음악이 재생 중일 때 아이콘 색상 변경 (선택 사항) */
+    #music-control.playing i {
+        color: #337ab7; /* 파란색 계열 */
+    }
+
+       /* 전체 컨테이너 스타일 */
+        .info-container {
+            font-family: 'Noto Sans KR', sans-serif; /* 폰트 적용 */
+            color: #333; /* 기본 글자 색상 */
+            line-height: 1.6; /* 줄 간격 */
+            margin: 20px; /* 외부 여백 */
+            padding: 20px; /* 내부 여백 */
+            border: 1px solid #eee; /* 테두리 */
+            border-radius: 8px; /* 둥근 모서리 */
+            max-width: 600px; /* 최대 너비 */
+            margin-left: auto; /* 가운데 정렬 */
+            margin-right: auto; /* 가운데 정렬 */
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05); /* 은은한 그림자 */
+        }
+
+        /* 섹션 제목 스타일 (예: 오시는 길 안내) */
+        .info-main-title {
+            text-align: center;
+            color: #555;
+            margin-bottom: 30px;
+            font-size: 1.8em; /* 글자 크기 */
+            font-weight: 500; /* 글자 굵기 */
+            border-bottom: 1px solid #f0f0f0; /* 아래 밑줄 */
+            padding-bottom: 15px;
+        }
+
+        /* 각 정보 섹션 (주소, 전화, 버스노선 등) */
+        .info-section {
+            margin-bottom: 25px; /* 섹션별 아래 여백 */
+            font-family: "Nanum Pen Script", cursive;
+            font-weight: 400;
+            font-style: normal;      
+        }
+
+        /* 각 정보 섹션의 제목 (예: 주소, 전화) */
+        .info-section-title {
+            font-weight: bold; /* 글자 굵게 */
+            color: #444; /* 글자 색상 */
+            /* font-size: 1.1em; */ /* 글자 크기 */
+            font-size: 2em;
+            margin-bottom: 8px; /* 제목 아래 여백 */
+        }
+
+        /* 각 정보 섹션의 내용 */
+        .info-content {
+            margin-left: 15px; /* 들여쓰기 */
+            margin-bottom: 5px; /* 각 줄의 아래 여백 */
+
+            font-size: 1.5em;
+        }
+
+        /* 목록 스타일 (버스 노선) */
+        .info-list {
+            list-style: none; /* 기본 리스트 마커 제거 */
+            padding-left: 15px; /* 들여쓰기 */
+            margin: 0; /* 기본 마진 제거 */
+
+            font-size: 1.5em;
+        }
+
+        .info-list-item {
+            margin-bottom: 5px; /* 리스트 항목별 아래 여백 */
+        }
+
+        /* 보조 텍스트 (예: 내비게이션 검색, 환승 안내) */
+        .info-sub-text {
+            color: #777; /* 회색 텍스트 */
+            font-size: 0.95em; /* 약간 작은 글자 */
+            margin-left: 15px; /* 들여쓰기 */
+
+            font-size: 1.5em;
+        }
+
+        /* 강조 텍스트 (예: 예식 시간 전부터 운행) */
+        .info-highlight-text {
+            color: #a00; /* 붉은색 텍스트 (강조) */
+            font-size: 0.95em; /* 약간 작은 글자 */
+            margin-left: 15px; /* 들여쓰기 */
+            font-weight: bold;
+
+            font-size: 1.5em;
+        }
+
+        /* 특정 키워드 강조 */
+        .keyword {
+            font-weight: bold;
+            color: #333; /* 기본 텍스트 색상 유지 또는 변경 */
+        }    
+        
+        /* D-day 플로팅 카운터 스타일 */
+        #d-day-floating-counter {
+            position: fixed; /* 화면에 고정 */
+            top: 15px; /* 상단에서 15px 아래 */
+            right: 15px; /* 우측에서 15px 왼쪽 */
+            /* left: 50%; (이전 코드, 삭제) */
+            /* transform: translateX(-50%); (이전 코드, 삭제) */
+            z-index: 10001; /* 음소거 버튼보다 높은 z-index */
+            background-color: rgba(0, 0, 0, 0.5); /* 반투명 배경 */
+            color: white;
+            font-family: 'Song Myung', serif;
+            font-size: 0.9em; /* 폰트 크기 조절 */
+            padding: 5px 10px; /* 내부 여백 */
+            border-radius: 5px; /* 둥근 모서리 */
+            white-space: nowrap; /* 텍스트가 줄바꿈되지 않도록 */
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2); /* 그림자 효과 */
+        }
+
+        @media (max-width: 768px) {
+            #d-day-floating-counter {
+                font-size: 0.8em; /* 모바일에서 폰트 크기 조정 */
+                padding: 4px 8px;
+            }
+        }
+    </style>
+    
+    <body id="page-top">
+
+        <div id="sealed-screen">
+            <div id="seal"></div>
+            <p id="seal-text">
+                두 사람의 소중한 시작<br>
+                봉인을 해제하고 함께 해주세요
+            </p>
+        </div>
+        
+        <div id="d-day-floating-counter"></div>
+
+        <div id="music-control">
+            <i class="fas fa-music"></i> </div>
+
+        <div id="main-wrapper">
+            <header class="masthead d-flex align-items-center">
+                <div class="gradient-fade"></div> 
+                <div class="container px-4 px-lg-5">
+                    <h2 class="masthead-title">소재영 · 박다은 결혼합니다</h2>
+                    <br>
+                    <p class="masthead-date-location" style="font-size: 1.4em;">
+                        <br>2025.10.18 토요일 12:00<br>
+                        대구스타디움 컨벤션<br>2층 컨벤션홀
+                    </p>
+                </div>
+            </header> 
+            
+            <section id="about">
+                <div class="container px-4 px-lg-5 text-center">
+                    <div class="row gx-4 gx-lg-5 justify-content-center">
+                        <div class="col-lg-10">
+                            <p class="font-size-md">
+                                <br>
+                                <br>
+                                <br>
+                                저희 두 사람이 변함없는 사랑과 믿음으로
+                                <br>
+                                이제 하나의 길을 걷고자 합니다.
+                                <br>
+                                오셔서 축복하여 주시면
+                                <br> 
+                                더없는 기쁨으로 간직하겠습니다.
+                            </p>
+                            <h2 class="font-size-lg"><br>소준기 · 조영자의 장남    소재영 <br>
+                                                                        박한조 · 김정화의 차녀    박다은 <br> 
+                            </h2>
+
+                            <p class="font-size-md">
+                                <br>
+                                <br>
+                                <br>
+                                <br>
+                                <br>
+                                <br> 
+                                오시는길
+                                <br>
+                            </p>
+                            <hr>  
+
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    <div class="map-icons-wrapper my-3 text-center">
+                                        <a href="https://naver.me/5S9QWcJd">
+                                            <img alt="naver-map" class="map-icon" id="naver-map"
+                                                src="assets/img/map/naver-map.png"/>
+                                        </a>
+                                        <a href="https://kko.kakao.com/ja9i8q57sk">
+                                            <img alt="kakao-map" class="map-icon" id="kakao-map"
+                                                src="assets/img/map/kakao-map.png"/>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div id="naver-map-container"></div>
+
+                            <div class="info-container">
+                        
+                                <div class="info-section">
+                                    <p class="info-section-title">주소</p>
+                                    <p class="info-content">대구광역시 수성구 대흥동 504번지</p>
+                                    <p class="info-content">스타디움컨벤션웨딩 (구 오월의정원수성점)</p>
+                                    <p class="info-sub-text">- 내비게이션 검색: <span class="keyword">대구스포츠기념관</span></p>
+                                </div>
+                        
+                                <div class="info-section">
+                                    <p class="info-section-title">전화</p>
+                                    <p class="info-content">053)791-3900</p>
+                                </div>
+                        
+                                <div class="info-section">
+                                    <p class="info-section-title">버스 노선</p>
+                                    <ul class="info-list">
+                                        <li class="info-list-item">- 경기장네거리 정차: 609, 수성6, 894, 949</li>
+                                        <li class="info-list-item">- 수성구 대흥동 앞 정차: 수성3-1</li>
+                                        <li class="info-list-item">- 대흥동 건너 정차: 수성3</li>
+                                        <li class="info-list-item">- 달구벌대로 정차(알파시티역 5번 출구): 100-1, 399, 990, 309, 349, 509, 609, 649, 724, 840, 937, 수성3, 848, 894</li>
+                                        <li class="info-list-item">→ <span class="keyword">대구스타디움</span> 또는 <span class="keyword">대흥동</span> 정차 버스로 환승</li>
+                                        <!-- info-sub-text -->
+                                    </ul>
+                                </div>
+                        
+                                <div class="info-section">
+                                    <p class="info-section-title">셔틀버스 운행</p>
+                                    <p class="info-content">2호선 신매역 하차, 3번 출구, 소방서 앞</p>
+                                    <p class="info-highlight-text">(예식 1시간 전부터 20분 간격 운행)</p>
+                                </div>
+                        
+                                <div class="info-section">
+                                    <p class="info-section-title">고속도로 이용</p>
+                                    <p class="info-content">동대구분기점 진입 대구부산고속도로 수성IC 이용</p>
+                                </div>
+                                </div>                            
+
+                            <p class="font-size-md">
+                                <br>
+                                <br>
+                                <br>
+                                <br>
+                                <br>
+                                <br> 
+                                사진첩
+                                <br>
+                            </p>   
+                            <hr>        
+                            <div id="photoCarousel" class="carousel slide" data-bs-ride="carousel">
+                                <div class="carousel-indicators">
+                                    <button type="button" data-bs-target="#photoCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                                    <button type="button" data-bs-target="#photoCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                                    <button type="button" data-bs-target="#photoCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                                    <button type="button" data-bs-target="#photoCarousel" data-bs-slide-to="3" aria-label="Slide 4"></button>
+                                    <button type="button" data-bs-target="#photoCarousel" data-bs-slide-to="4" aria-label="Slide 5"></button>                      
+                                    </div>
+                                
+                                <div class="carousel-inner">
+                                    <div class="carousel-item active">
+                                        <img src="assets/img/test1.jpg" class="d-block w-100" alt="웨딩 사진 1">
+                                    </div>
+                                    <div class="carousel-item">
+                                        <img src="assets/img/test3.jpg" class="d-block w-100" alt="웨딩 사진 2">
+                                    </div>
+                                    <div class="carousel-item">
+                                        <img src="assets/img/test4.jpg" class="d-block w-100" alt="웨딩 사진 3">
+                                    </div>
+                                    <div class="carousel-item">
+                                        <img src="assets/img/test5.jpg" class="d-block w-100" alt="웨딩 사진 4">
+                                    </div>
+                                    <div class="carousel-item">
+                                        <img src="assets/img/test6.jpg" class="d-block w-100" alt="웨딩 사진 5">
+                                    </div>         
+                                    </div>
+                                
+                                <button class="carousel-control-prev" type="button" data-bs-target="#photoCarousel" data-bs-slide="prev">
+                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Previous</span>
+                                </button>
+                                <button class="carousel-control-next" type="button" data-bs-target="#photoCarousel" data-bs-slide="next">
+                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Next</span>
+                                </button>
+                            </div>
+                            
+                            <p class="font-size-md">
+                                <br>
+                                <br>
+                                <br>
+                                <br>
+                                <br>
+                                <br> 
+                                신랑 신부에게 축하의 말 전하기
+                                <br>
+                            </p>
+                            <hr>
+                            <iframe src="https://padlet.com/threeout56/padlet-lf0wod6kw6eresgw" frameborder="0" width="100%" height="600" style="border:0;" allowfullscreen></iframe>
+
+                            <p class="font-size-md">
+                                <br>
+                                <br>
+                                <br>
+                                <br>
+                                <br>
+                                <br> 
+                                찍은 사진을 공유해주세요 !
+                                <br>
+                            </p>
+                            <hr>
+                            <p class="font-size-md text-center">
+                                <a href="https://padlet.com/threeout56/padlet-18in5esf2bs51cqd" target="_blank" style="display: inline-block; padding: 12px 24px; font-size: 1.1em; text-decoration: none; color: white; background-color: #d88f8f; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                                    공유하러가기
+                                </a>
+                            </p>
+                            
+                            <p class="font-size-md">
+                                <br>
+                                <br>
+                                <br>
+                                <br>
+                                <br>
+                                <br> 
+                                마음 전하실 곳
+                                <br>
+                            </p>
+                            <hr>
+                            <div class="account-info-section">
+                                <div class="account-item">
+                                    <span class="account-owner">신랑 측 소재영</span>
+                                    <span class="account-detail">국민은행 <span class="account-number-display">6608-02-04125828</span></span>
+                                    <button type="button" class="btn btn-sm btn-outline-secondary copy-btn" data-account-number="66080204125828">복사</button>
+                                    <span class="copy-feedback"></span>
+                                </div>
+                                <div class="account-item">
+                                    <span class="account-owner">신부 측 박다은</span>
+                                    <span class="account-detail">IM뱅크(대구은행) <span class="account-number-display">509-10-989074-8</span></span>
+                                    <button type="button" class="btn btn-sm btn-outline-secondary copy-btn" data-account-number="509109890748">복사</button>
+                                    <span class="copy-feedback"></span>
+                                </div>
+                                <div class="account-item">
+                                    <span class="account-owner">신랑 혼주 소준기</span>
+                                    <span class="account-detail">국민은행 <span class="account-number-display">660-24-0041-551</span></span>
+                                    <button type="button" class="btn btn-sm btn-outline-secondary copy-btn" data-account-number="660240041551">복사</button>
+                                    <span class="copy-feedback"></span>
+                                </div>
+                                <div class="account-item">
+                                    <span class="account-owner">신부 혼주 박한조</span>
+                                    <span class="account-detail">IM뱅크(대구은행) <span class="account-number-display">242-08-010555-4</span></span>
+                                    <button type="button" class="btn btn-sm btn-outline-secondary copy-btn" data-account-number="242080105554">복사</button>
+                                    <span class="copy-feedback"></span>
+                                </div>
+                            </div>
+
+
+                            <p class="font-size-md">
+                                <br>
+                                <br>
+                                <br>
+                                <br>
+                                <br>
+                                <br> 
+                                쉬었다 가기
+                                <br>
+                            </p>
+                            <hr>
+                            <div style="
+                                display: flex;
+                                justify-content: center; /* 가로 중앙 정렬 */
+                                align-items: flex-start; /* 세로 상단 정렬 */
+                                
+                                /* ***** 주요 변경사항 ***** */
+                                height: 550px; /* 또는 게임 컨테이너가 잘리지 않을 최소 높이로 설정 (예: 600px) */
+                                overflow: hidden; /* 이 div를 벗어나는 내용은 숨김 */
+                                /* *********************** */
+                                
+                                margin: 0 auto; /* 좌우 마진 auto로 가로 중앙 정렬 보조, 위아래 마진 0 */
+                                padding: 0;
+                                max-width: 620px; /* iframe max-width(600px) + border(2px*2) + padding(0)보다 약간 크게 설정 */
+                            ">
+                                <iframe src="pages/minigame.html" 
+                                        width="100%" 
+                                        height="100%" /* iframe 자체의 높이를 부모 div에 꽉 채우도록 100%로 설정 */
+                                        frameborder="0" 
+                                        scrolling="no"
+                                        style="
+                                            max-width: 600px; /* iframe의 최대 너비는 유지 */
+                                            border: 1px solid #ddd; 
+                                            border-radius: 10px;
+                                        ">
+                                </iframe>
+                            </div>
+
+                            
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            
+            <footer class="footer text-center">
+                <div class="container px-4 px-lg-5">
+                    <ul class="list-inline">
+                        <li class="list-inline-item">
+                            <a class="social-link rounded-circle text-white mr-5" title="링크 복사하기" onclick="copyLink(); return false;" href="#!"><i class="fa-solid fa-link"></i></a>
+                        </li>
+                    </ul>
+                    <p class="text-muted small mb-0" style="font-family: 'Gowun Dodum', sans-serif;">Made By Jaeyoung · Daeun</p>
+                </div>
+            </footer>
+        </div>  
+        
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="js/scripts.js"></script>
+
+        <audio id="background-music" loop preload="auto">
+            <source src="assets/bgm.mp3" type="audio/mpeg">
+            Your browser does not support the audio element.
+        </audio>
+
+        <script type="text/javascript" src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpKeyId=g7meedd7t1"></script>
+
+        <script>
+            const sealedScreen = document.getElementById('sealed-screen');
+            const seal = document.getElementById('seal');
+            const mainWrapper = document.getElementById('main-wrapper'); 
+            const audio = document.getElementById('background-music');
+            // 새로 추가된 부분
+            const musicControl = document.getElementById('music-control'); 
+            const dDayFloatingCounter = document.getElementById('d-day-floating-counter'); // D-day 플로팅 카운터 요소
+
+            // 결혼식 날짜와 시간 설정 (2025년 10월 18일 12시 0분 0초 KST)
+            const weddingDate = new Date('2025-10-18T12:00:00+09:00'); // KST는 UTC+9
+
+            function updateDDay() {
+                const now = new Date();
+                
+                // 현재 날짜의 자정 (00:00:00)을 기준으로 설정
+                const nowMidnight = new Date(now);
+                nowMidnight.setHours(0, 0, 0, 0);
+
+                // 결혼식 날짜의 자정 (00:00:00)을 기준으로 설정
+                const weddingMidnight = new Date(weddingDate); 
+                weddingMidnight.setHours(0, 0, 0, 0); // 결혼식 날짜의 자정으로 설정 (한국 시간)
+
+                const diff = weddingMidnight.getTime() - nowMidnight.getTime(); // 밀리초 단위 차이
+
+                // 결혼식 날짜가 이미 지났을 경우
+                if (diff <= 0) {
+                    dDayFloatingCounter.textContent = '저희 결혼했어요!';
+                    clearInterval(dDayInterval); // 카운터 정지
+                    return;
+                }
+
+                const days = Math.floor(diff / (1000 * 60 * 60 * 24)); // Calculate full days
+
+                // 시간 정보 제외하고 'D-days'만 표시
+                dDayFloatingCounter.textContent = `D-${days}`;
+            }
+
+            // 1초마다 D-day 업데이트
+            let dDayInterval = setInterval(updateDDay, 1000);
+            updateDDay(); // 페이지 로드 시 즉시 업데이트
+
+            seal.addEventListener('click', () => {
+                sealedScreen.style.opacity = '0';
+                setTimeout(() => {
+                    sealedScreen.style.display = 'none';
+                    mainWrapper.style.display = 'block'; 
+                    // 봉인 해제 시 음악 제어 버튼 표시
+                    musicControl.style.display = 'flex'; 
+                    // 봉인 해제 시 D-day 플로팅 카운터 표시
+                    dDayFloatingCounter.style.display = 'block';
+                    
+                    audio.play()
+                        .then(() => {
+                            console.log("음악 재생 시작!");
+                            // 음악 재생 시작 시 'playing' 클래스 추가하여 아이콘 색상 변경
+                            musicControl.classList.add('playing'); 
+                        })
+                        .catch(error => {
+                            console.error("음악 재생 실패:", error);
+                        });
+                }, 1000); 
+            });
+
+            // 음악 제어 버튼 클릭 이벤트
+            musicControl.addEventListener('click', () => {
+                if (audio.paused) { // 음악이 멈춰있다면
+                    audio.play(); // 재생
+                    musicControl.classList.add('playing'); // 'playing' 클래스 추가
+                } else { // 음악이 재생 중이라면
+                    audio.pause(); // 정지
+                    musicControl.classList.remove('playing'); // 'playing' 클래스 제거
+                }
+            });
+
+            window.addEventListener('load', () => {
+                window.scrollTo(0, 0);
+                // 페이지 로드 시에는 음악 제어 버튼을 숨김 (봉인 해제 후 보이게)
+                musicControl.style.display = 'none'; 
+                // 페이지 로드 시 D-day 플로팅 카운터 숨김
+                dDayFloatingCounter.style.display = 'none';
+
+                // 네이버 지도 초기화 및 마커 표시
+                var mapOptions = {
+                    center: new naver.maps.LatLng(35.829267, 128.687395), // 예식장 좌표
+                    zoom: 17, // 확대 레벨
+                    minZoom: 12, // 최소 줌 레벨
+                    zoomControl: true, // 줌 컨트롤 표시
+                    zoomControlOptions: {
+                        position: naver.maps.Position.TOP_RIGHT
+                    }
+                };
+
+                var map = new naver.maps.Map('naver-map-container', mapOptions);
+
+                var marker = new naver.maps.Marker({
+                    position: new naver.maps.LatLng(35.829267, 128.687395), // 예식장 좌표
+                    map: map
+                });
+            });
+
+            // 핀치 줌 비활성화 JavaScript (모바일에서 지도 스크롤과 충돌 방지를 위해 필요)
+            document.addEventListener('gesturestart', function (e) {
+                e.preventDefault();
+            });
+            document.addEventListener('touchstart', function (event) {
+                if (event.touches.length > 1) {
+                    event.preventDefault();
+                }
+            }, { passive: false });
+
+            document.addEventListener('touchmove', function (event) {
+                if (event.touches.length > 1) {
+                    event.preventDefault();
+                }
+            }, { passive: false });
+
+            document.addEventListener('touchend', function (event) {
+                if (event.touches.length > 1) {
+                    event.preventDefault();
+                }
+            });
+
+            // 복사 버튼 관련 스크립트 (기존 코드 유지)
+            document.addEventListener('DOMContentLoaded', function() {
+                const copyButtons = document.querySelectorAll('.copy-btn');
+
+                copyButtons.forEach(button => {
+                    button.addEventListener('click', function() {
+                        const accountNumber = this.getAttribute('data-account-number');
+                        const feedbackSpan = this.nextElementSibling; 
+
+                        if (navigator.clipboard && navigator.clipboard.writeText) {
+                            navigator.clipboard.writeText(accountNumber)
+                                .then(() => {
+                                    feedbackSpan.textContent = '복사 완료!';
+                                    feedbackSpan.classList.add('show');
+                                    setTimeout(() => {
+                                        feedbackSpan.classList.remove('show');
+                                        feedbackSpan.textContent = ''; 
+                                    }, 1500);
+                                })
+                                .catch(err => {
+                                    console.error('Failed to copy text: ', err);
+                                    feedbackSpan.textContent = '복사 실패!';
+                                    feedbackSpan.classList.add('show');
+                                    setTimeout(() => {
+                                        feedbackSpan.classList.remove('show');
+                                        feedbackSpan.textContent = '';
+                                    }, 1500);
+                                });
+                        } else {
+                            const textArea = document.createElement('textarea');
+                            textArea.value = accountNumber;
+                            document.body.appendChild(textArea);
+                            textArea.focus();
+                            textArea.select();
+                            try {
+                                document.execCommand('copy');
+                                feedbackSpan.textContent = '복사 완료! (수동)';
+                                feedbackSpan.classList.add('show');
+                                setTimeout(() => {
+                                    feedbackSpan.classList.remove('show');
+                                    feedbackSpan.textContent = ''; 
+                                }, 1500);
+                            } catch (err) {
+                                console.error('Fallback: Oops, unable to copy', err);
+                                feedbackSpan.textContent = '복사 실패!';
+                                feedbackSpan.classList.add('show');
+                                setTimeout(() => {
+                                    feedbackSpan.classList.remove('show');
+                                    feedbackSpan.textContent = '';
+                                }, 1500);
+                            }
+                            document.body.removeChild(textArea);
+                        }
+                    });
+                });
+            });
+        </script>
+    </body>
+</html>

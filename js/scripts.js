@@ -5,8 +5,8 @@
 */
 
 // 링크 복사
-function copyLink(){
-	var url = 'https://comgongnuna.github.io/';
+function copyLink_wedding(){
+	var url = 'https://jaeyoungso.github.io/wedding';
 	var textarea = document.createElement("textarea");
 	document.body.appendChild(textarea);
 	textarea.value = url;
@@ -15,7 +15,26 @@ function copyLink(){
 	document.body.removeChild(textarea);
 	alert("링크가 복사되었습니다. 널리널리 퍼뜨려주세요💕")
 }
-
+function copyLink_1386(){
+	var url = 'https://jaeyoungso.github.io/1386';
+	var textarea = document.createElement("textarea");
+	document.body.appendChild(textarea);
+	textarea.value = url;
+	textarea.select();
+	document.execCommand("copy");
+	document.body.removeChild(textarea);
+	alert("링크가 복사되었습니다. 널리널리 퍼뜨려주세요💕")
+}
+function copyLink_1394(){
+	var url = 'https://jaeyoungso.github.io/1394';
+	var textarea = document.createElement("textarea");
+	document.body.appendChild(textarea);
+	textarea.value = url;
+	textarea.select();
+	document.execCommand("copy");
+	document.body.removeChild(textarea);
+	alert("링크가 복사되었습니다. 널리널리 퍼뜨려주세요💕")
+}
 // 신부 계좌번호 복사
 function brideAccountNumber(){
 	var bride_account = '00000000 카카오뱅크';
